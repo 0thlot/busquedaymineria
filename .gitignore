@@ -10,8 +10,10 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+!/Practica 1/lib
+
 # Package Files #
-*.jar
+
 *.war
 *.ear
 *.zip
