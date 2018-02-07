@@ -1,11 +1,15 @@
+javier.sanz-cruzado@uam.es
+B-408
+
 ### Index Writer
 
 ##### IndexConfigWriter
 * usamos Standard Analyzer
 * setOpenMode (**CREATE** o CREATE_OR_APPEND)
-* Directory (RAMDirectory o **FSDirectory** )
+##### Directory 
+ *(RAMDirectory o **FSDirectory** )
 
-##### Document
+### Document
 * Field1 -> ruta zip/carpeta/txt
 * Field2 -> texto Field(name,valor,fieldType)
     * Type setStoreTerms(true)
