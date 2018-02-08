@@ -28,6 +28,12 @@ public class LuceneBuilder implements IndexBuilder{
     @Override
     public void build(String collectionPath, String indexPath) throws IOException {
 
+        File filePath = new File(collectionPath);
+
+        if (!filePath.exists()) {
+            throw new IOException();
+        }
+
         IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
 
@@ -36,53 +42,46 @@ public class LuceneBuilder implements IndexBuilder{
 
 
         FieldType typeText = new FieldType();
-        FieldType typeUrl = new FieldType();
         typeText.setStored(true);
         typeText.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+        FieldType typeUrl = new FieldType();
+        typeUrl.setStored(true);
 
-        if(collectionPath.contains(".txt")){
 
-        }else if(collectionPath.contains(".zip")){
+        if(collectionPath.endsWith(".txt")){
 
-        }//caso carpeta
-        else{
-            File dir = new File(collectionPath);
-            File[] files = dir.listFiles();
+        }else if(collectionPath.endsWith(".zip")){
 
-            for(File f: files){
-                Document doc = new Document();
-                Field urlField = new Field("path",f.getCanonicalPath(),typeUrl);
-                org.jsoup.nodes.Document d = Jsoup.parse(f,"UTF-8");
-                Field contField = new Field("texto",d.outerHtml(),typeText);
-                doc.add(urlField);
-                doc.add(contField);
-                this.m_indexWriter.addDocument(doc);
+        }else if(filePath.isDirectory()){
 
-            }
+            File[] files = filePath.listFiles();
+            Arrays.stream(files).parallel().forEach((f) -> {
+
+                try{
+                    Document doc = new Document();
+                    org.jsoup.nodes.Document d = Jsoup.parse(f, "UTF-8");
+                    Field urlField = new Field("path", d.baseUri(), typeUrl);
+                    Field contField = new Field("texto", d.normalise().text(), typeText);
+                    doc.add(urlField);
+                    doc.add(contField);
+                    this.m_indexWriter.addDocument(doc);
+
+                }catch (IOException e){
+                    throw new RuntimeException(e);
+                }
+
+            });
+
+
+        }else{
+            throw new IOException();
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         this.m_indexWriter.close();
 
+    }
 
+    private void descomprimir(){
 
     }
 }
