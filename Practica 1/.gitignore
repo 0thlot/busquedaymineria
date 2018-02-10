@@ -27,3 +27,4 @@ hs_err_pid*
 /resource/*.html
 .idea/workspace.xml
 resource/
+!/lib/jsoup-1.11.2.jar
