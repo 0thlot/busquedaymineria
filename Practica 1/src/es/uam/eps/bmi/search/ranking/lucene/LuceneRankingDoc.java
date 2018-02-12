@@ -13,7 +13,7 @@ public class LuceneRankingDoc extends SearchRankingDoc {
     Index index;
     ScoreDoc rankedDoc;
     
-    LuceneRankingDoc (Index idx, ScoreDoc r) {
+    public LuceneRankingDoc (Index idx, ScoreDoc r) {
         index = idx;
         rankedDoc = r;
     }
