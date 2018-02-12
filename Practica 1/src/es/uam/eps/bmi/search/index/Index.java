@@ -1,5 +1,7 @@
 package es.uam.eps.bmi.search.index;
 
+import es.uam.eps.bmi.search.index.freq.FreqVector;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -23,14 +25,15 @@ public interface Index {
      * @param docIS
      * @return
      */
-    public Vector<String> getDocVector(int docIS);
+    public FreqVector getDocVector(int docIS);
 
     /**
+     * Guarda la relacion asociada a un documento.
      *
-     * @param docIS
-     * @return
+     * @param docID ID del documento.
+     * @return direccion del documento.
      */
-    public int getDocPath(int docIS);
+    public String getDocPath(int docID);
 
     /**
      *
@@ -45,7 +48,7 @@ public interface Index {
      * @param palabra
      * @return
      */
-    public float getDocFreq(String palabra) throws IOException;
+    public float getDocFreq(String palabra);
 
 
 }
