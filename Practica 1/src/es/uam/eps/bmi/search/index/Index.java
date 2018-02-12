@@ -1,5 +1,6 @@
 package es.uam.eps.bmi.search.index;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -8,7 +9,7 @@ public interface Index {
      *
      * @return
      */
-    public ArrayList<String> getAllTerms(); //-> devuelve List<String>
+    public ArrayList<String> getAllTerms();
 
     /**
      *
@@ -44,7 +45,7 @@ public interface Index {
      * @param palabra
      * @return
      */
-    public float getDocFreq(String palabra);
+    public float getDocFreq(String palabra) throws IOException;
 
 
 }
