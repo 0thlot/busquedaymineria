@@ -54,8 +54,8 @@ public class LuceneIndex implements Index{
 
     @Override
     public String getDocPath(int docID) throws IOException{
-        Terms t = m_indexReader.getTermVector(docID, "path");
-        return t.iterator().term().utf8ToString();
+
+        return m_indexReader.document(docID).get("path");
     }
 
     @Override
