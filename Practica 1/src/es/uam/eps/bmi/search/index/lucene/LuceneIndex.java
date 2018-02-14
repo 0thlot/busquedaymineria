@@ -67,7 +67,7 @@ public class LuceneIndex implements Index{
     @Override
     public int getDocFreq(String palabra) throws IOException{
 
-        return  m_indexReader.getDocCount(palabra);
+        return  m_indexReader.docFreq(new Term("texto",palabra));
     }
 
     @Override

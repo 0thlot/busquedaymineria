@@ -4,7 +4,7 @@ import org.apache.lucene.search.ScoreDoc;
 
 import java.io.IOException;
 
-public class SearchRankingDoc implements Comparable<SearchRankingDoc> {
+public abstract class SearchRankingDoc implements Comparable<SearchRankingDoc> {
 
     private ScoreDoc scoreDoc;
     private String ruta;
@@ -27,18 +27,10 @@ public class SearchRankingDoc implements Comparable<SearchRankingDoc> {
 
     }
 
-    @Override
-    public String toString() {
-        return  scoreDoc.score + "\t" + ruta ;
-    }
 
-    /*Esto es nuevo de Jorge*/
-    public String getPath() throws IOException{
-        return ruta;
-    }
+     public abstract double getScore() ;
 
-    /*Esto es nuevo de Jorge*/
-    public  double getScore(){
-        return scoreDoc.score;
-    }
+
+    public abstract String getPath() throws IOException;
+
 }

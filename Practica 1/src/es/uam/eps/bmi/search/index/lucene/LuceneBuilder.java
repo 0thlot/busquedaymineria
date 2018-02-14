@@ -2,7 +2,10 @@ package es.uam.eps.bmi.search.index.lucene;
 
 import es.uam.eps.bmi.search.index.IndexBuilder;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.*;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -48,9 +51,9 @@ public class LuceneBuilder implements IndexBuilder{
 
         if(collectionPath.endsWith(".txt")){
             List<String> strings = Files.readAllLines(filePath.toPath());
-            strings.stream().forEach(s -> {
+            strings.forEach(s -> {
                 try {
-                    org.jsoup.nodes.Document d =Jsoup.connect(s).timeout(20000).get();
+                    org.jsoup.nodes.Document d =Jsoup.connect(s).validateTLSCertificates(false).get();
                     addDocumento(d);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -59,9 +62,9 @@ public class LuceneBuilder implements IndexBuilder{
 
         }else if(collectionPath.endsWith(".zip")){
             ZipFile zipFile = new ZipFile(collectionPath);
-            List<? extends ZipEntry> files = zipFile.stream().filter((f)->{return !f.isDirectory() ;}).collect(Collectors.toList());
+            List<? extends ZipEntry> files = zipFile.stream().filter((f)-> !f.isDirectory()).collect(Collectors.toList());
             files.parallelStream().forEach(f -> {
-                InputStream is = null;
+                InputStream is;
                 try {
                     is = zipFile.getInputStream(f);
                     org.jsoup.nodes.Document d = Jsoup.parse(is,"UTF-8",collectionPath+f.getName());
@@ -75,7 +78,7 @@ public class LuceneBuilder implements IndexBuilder{
         }else if(filePath.isDirectory()){
 
             File[] files = filePath.listFiles();
-            Arrays.stream(files).filter((f)->{return !f.isDirectory() ;}).forEach((f) -> {
+            Arrays.stream(files).filter((f)-> !f.isDirectory()).forEach((f) -> {
                 try{
                     org.jsoup.nodes.Document d = Jsoup.parse(f, "UTF-8");
                     addDocumento(d);
