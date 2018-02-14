@@ -14,38 +14,36 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 public class LuceneIndex implements Index{
 
     private IndexReader m_indexReader;
-    private String path;
+    private ArrayList<String> termList;
 
+    /**
+     *
+     * @param indexPath
+     * @throws IOException
+     */
     public LuceneIndex(String indexPath) throws IOException {
-        /* Variables de inicializacion para IndexReader */
-        IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
-        Directory directory = FSDirectory.open(Paths.get(indexPath));
-        IndexWriter indexWriter = new IndexWriter(directory,config);
-        /* Asignacion indexReader */
-        m_indexReader = DirectoryReader.open(indexWriter);
-        path=indexPath;
+        /* Inicializacion para IndexReader */
+        m_indexReader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
+
+        /* Inicializacion de la lista de terminos y del iterador de terminos */
+        termList = new ArrayList<String>();
+        TermsEnum terms = MultiFields.getFields(m_indexReader).terms("texto").iterator();
+
+        /* Construimos la lista de terminos iterando el indice*/
+        while (terms.next() != null){
+            termList.add(terms.term().utf8ToString());
+        }
     }
 
     @Override
     public ArrayList<String> getAllTerms() {
-        ArrayList<String> terminos = new ArrayList<String>();
-        try{
-            /* Iteramos los documentos del indice (De verdad estamos visitando todos los docs??)*/
-            for(int i=0; i<m_indexReader.numDocs();i++) {
-                /*Itermaos los terminos de los documentos*/
-                for (Iterator<String> it = m_indexReader.getTermVectors(i).iterator(); it.hasNext(); )
-                    terminos.add(it.next());
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return terminos;
-
+        return termList;
     }
 
     @Override
@@ -68,13 +66,15 @@ public class LuceneIndex implements Index{
             e.printStackTrace();
         }
         return vector;
-
-
     }
 
     @Override
     public String getDocPath(int docID){
-        return  m_indexReader.getTermVector(docID, "path");
+        try {
+            return m_indexReader.getTermVector(docID, "path").toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
