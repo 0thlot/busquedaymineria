@@ -13,7 +13,8 @@ public class LuceneRankingDoc extends SearchRankingDoc {
     Index index;
     ScoreDoc rankedDoc;
     
-    public LuceneRankingDoc (Index idx, ScoreDoc r) {
+    LuceneRankingDoc (Index idx, ScoreDoc r) {
+        super();
         index = idx;
         rankedDoc = r;
     }
@@ -24,7 +25,7 @@ public class LuceneRankingDoc extends SearchRankingDoc {
     }
 
     @Override
-    public String getPath()  {
+    public String getPath() throws IOException {
         return index.getDocPath(rankedDoc.doc);
     }
 }

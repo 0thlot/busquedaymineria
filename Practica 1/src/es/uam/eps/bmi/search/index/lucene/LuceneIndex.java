@@ -3,24 +3,18 @@ package es.uam.eps.bmi.search.index.lucene;
 import es.uam.eps.bmi.search.index.Index;
 import es.uam.eps.bmi.search.index.freq.FreqVector;
 import es.uam.eps.bmi.search.index.freq.lucene.LuceneFreqVector;
-import es.uam.eps.bmi.search.index.freq.lucene.LuceneTermFreq;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.*;
-import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 public class LuceneIndex implements Index{
 
     private IndexReader m_indexReader;
-    private ArrayList<String> termList;
+    private List<String> termList;
 
     /**
      *
@@ -35,6 +29,7 @@ public class LuceneIndex implements Index{
         termList = new ArrayList<String>();
         TermsEnum terms = MultiFields.getFields(m_indexReader).terms("texto").iterator();
 
+
         /* Construimos la lista de terminos iterando el indice*/
         while (terms.next() != null){
             termList.add(terms.term().utf8ToString());
@@ -42,64 +37,44 @@ public class LuceneIndex implements Index{
     }
 
     @Override
-    public ArrayList<String> getAllTerms() {
+    public List<String> getAllTerms() {
+
         return termList;
     }
 
     @Override
-    public int getTotalFreq(String palabra) {
-        int freq=0;
-        try{
-            freq = (int) m_indexReader.getSumTotalTermFreq(palabra);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return freq;
+    public long getTotalFreq(String palabra) throws IOException{
+            return  m_indexReader.getSumTotalTermFreq(palabra);
     }
 
     @Override
-    public FreqVector getDocVector(int docID){
-        LuceneFreqVector vector=null;
-        try {
-            vector = new LuceneFreqVector(m_indexReader.getTermVector(docID, "texto"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return vector;
+    public FreqVector getDocVector(int docID) throws IOException{
+
+        return new LuceneFreqVector(m_indexReader.getTermVector(docID, "texto"));
     }
 
     @Override
-    public String getDocPath(int docID){
-        try {
-            return m_indexReader.getTermVector(docID, "path").toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public String getDocPath(int docID) throws IOException{
+
+        return m_indexReader.getTermVector(docID, "path").toString();
     }
 
     @Override
-    public float getTermFreq(String palabra, int docID) {
-        Terms term = null;
-        float freq=0;
-        try{
-            term = m_indexReader.getTermVector(docID,palabra);
-            freq = (float) term.getSumTotalTermFreq();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-        return freq;
+    public long getTermFreq(String palabra, int docID) throws IOException{
 
+        return m_indexReader.getTermVector(docID,palabra).getSumTotalTermFreq();
     }
 
     @Override
-    public float getDocFreq(String palabra) {
-        float freq=0;
-        try {
-            freq =  (float) m_indexReader.getDocCount(palabra);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return freq;
+    public int getDocFreq(String palabra) throws IOException{
+
+        return  m_indexReader.getDocCount(palabra);
     }
+
+    @Override
+    public IndexReader getIndexReader() {
+        return this.m_indexReader;
+    }
+
+
 }

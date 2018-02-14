@@ -13,6 +13,6 @@ public class VSMEngine extends AbstractEngine{
     }
 
     public SearchRanking search(String query, int cutoff) throws IOException{
-
+        return null;
     }
 }

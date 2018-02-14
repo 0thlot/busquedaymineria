@@ -9,6 +9,9 @@ public class SearchRankingDoc implements Comparable<SearchRankingDoc> {
     private ScoreDoc scoreDoc;
     private String ruta;
 
+    public SearchRankingDoc() {
+    }
+
     public SearchRankingDoc(ScoreDoc score, String ruta) {
         this.scoreDoc = score;
         this.ruta = ruta;
@@ -30,7 +33,7 @@ public class SearchRankingDoc implements Comparable<SearchRankingDoc> {
     }
 
     /*Esto es nuevo de Jorge*/
-    public String getPath(){
+    public String getPath() throws IOException{
         return ruta;
     }
 

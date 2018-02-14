@@ -1,31 +1,31 @@
 package es.uam.eps.bmi.search.index;
 
 import es.uam.eps.bmi.search.index.freq.FreqVector;
+import org.apache.lucene.index.IndexReader;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Vector;
+import java.util.List;
 
 public interface Index {
     /**
      *
      * @return
      */
-    public ArrayList<String> getAllTerms();
+    public List<String> getAllTerms();
 
     /**
      *
      * @param palabra
      * @return
      */
-    public int getTotalFreq(String palabra);
+    public long getTotalFreq(String palabra) throws IOException;
 
     /**
      *
      * @param docIS
      * @return
      */
-    public FreqVector getDocVector(int docIS);
+    public FreqVector getDocVector(int docIS) throws IOException;
 
     /**
      * Guarda la relacion asociada a un documento.
@@ -33,7 +33,7 @@ public interface Index {
      * @param docID ID del documento.
      * @return direccion del documento.
      */
-    public String getDocPath(int docID);
+    public String getDocPath(int docID) throws IOException;
 
     /**
      *
@@ -41,14 +41,16 @@ public interface Index {
      * @param docID
      * @return
      */
-    public float getTermFreq(String palabra, int docID);
+    public long getTermFreq(String palabra, int docID) throws IOException;
 
     /**
      *
      * @param palabra
      * @return
      */
-    public float getDocFreq(String palabra);
+    public int getDocFreq(String palabra) throws IOException;
+
+    public IndexReader getIndexReader();
 
 
 }
