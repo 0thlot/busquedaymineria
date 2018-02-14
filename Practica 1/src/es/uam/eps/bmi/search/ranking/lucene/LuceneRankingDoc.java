@@ -17,11 +17,14 @@ public class LuceneRankingDoc extends SearchRankingDoc {
         index = idx;
         rankedDoc = r;
     }
+
+    @Override
     public double getScore() {
         return rankedDoc.score;
     }
 
-    public String getPath() throws IOException {
+    @Override
+    public String getPath()  {
         return index.getDocPath(rankedDoc.doc);
     }
 }

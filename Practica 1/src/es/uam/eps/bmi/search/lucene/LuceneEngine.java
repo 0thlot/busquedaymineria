@@ -1,6 +1,7 @@
 package es.uam.eps.bmi.search.lucene;
 
 import es.uam.eps.bmi.search.AbstractEngine;
+import es.uam.eps.bmi.search.index.lucene.LuceneIndex;
 import es.uam.eps.bmi.search.ranking.SearchRanking;
 
 import java.io.IOException;
@@ -9,10 +10,8 @@ public class LuceneEngine extends AbstractEngine {
 
 
 
-    public LuceneEngine(String indexPath) {
-
+    public LuceneEngine(String indexPath) throws IOException {
         super(new LuceneIndex(indexPath));
-
     }
 
     @Override

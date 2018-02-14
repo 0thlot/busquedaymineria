@@ -2,6 +2,8 @@ package es.uam.eps.bmi.search.ranking;
 
 import org.apache.lucene.search.ScoreDoc;
 
+import java.io.IOException;
+
 public class SearchRankingDoc implements Comparable<SearchRankingDoc> {
 
     private ScoreDoc scoreDoc;
@@ -25,5 +27,15 @@ public class SearchRankingDoc implements Comparable<SearchRankingDoc> {
     @Override
     public String toString() {
         return  scoreDoc.score + "\t" + ruta ;
+    }
+
+    /*Esto es nuevo de Jorge*/
+    public String getPath(){
+        return ruta;
+    }
+
+    /*Esto es nuevo de Jorge*/
+    public  double getScore(){
+        return scoreDoc.score;
     }
 }
