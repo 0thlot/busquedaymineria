@@ -26,14 +26,13 @@ public class LuceneIndex implements Index{
         m_indexReader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
 
         /* Inicializacion de la lista de terminos y del iterador de terminos */
-        termList = new ArrayList<String>();
+        termList = new ArrayList<>();
         TermsEnum terms = MultiFields.getFields(m_indexReader).terms("texto").iterator();
-
-
         /* Construimos la lista de terminos iterando el indice*/
-        while (terms.next() != null){
+        while (terms.next() != null) {
             termList.add(terms.term().utf8ToString());
         }
+
     }
 
     @Override
@@ -44,7 +43,7 @@ public class LuceneIndex implements Index{
 
     @Override
     public long getTotalFreq(String palabra) throws IOException{
-            return  m_indexReader.getSumTotalTermFreq(palabra);
+          return  m_indexReader.totalTermFreq(new Term("texto",palabra));
     }
 
     @Override
@@ -55,14 +54,14 @@ public class LuceneIndex implements Index{
 
     @Override
     public String getDocPath(int docID) throws IOException{
-
-        return m_indexReader.getTermVector(docID, "path").toString();
+        Terms t = m_indexReader.getTermVector(docID, "path");
+        return t.iterator().term().utf8ToString();
     }
 
     @Override
     public long getTermFreq(String palabra, int docID) throws IOException{
 
-        return m_indexReader.getTermVector(docID,palabra).getSumTotalTermFreq();
+        return getDocVector(docID).getFreq(palabra);
     }
 
     @Override

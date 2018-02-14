@@ -2,9 +2,7 @@ package es.uam.eps.bmi.search.index.lucene;
 
 import es.uam.eps.bmi.search.index.IndexBuilder;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -26,13 +24,10 @@ import java.util.zip.ZipFile;
 public class LuceneBuilder implements IndexBuilder{
 
     private IndexWriter m_indexWriter;
-    private FieldType typeUrl = new FieldType();
-    private FieldType typeText  = new FieldType();
+
 
     public LuceneBuilder() {
-        typeText.setStored(true);
-        typeText.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
-        typeUrl.setStored(true);
+
     }
 
     @Override
@@ -53,7 +48,7 @@ public class LuceneBuilder implements IndexBuilder{
 
         if(collectionPath.endsWith(".txt")){
             List<String> strings = Files.readAllLines(filePath.toPath());
-            strings.parallelStream().forEach(s -> {
+            strings.stream().forEach(s -> {
                 try {
                     org.jsoup.nodes.Document d =Jsoup.connect(s).timeout(20000).get();
                     addDocumento(d);
@@ -64,7 +59,7 @@ public class LuceneBuilder implements IndexBuilder{
 
         }else if(collectionPath.endsWith(".zip")){
             ZipFile zipFile = new ZipFile(collectionPath);
-            List<? extends ZipEntry> files = zipFile.stream().parallel().filter((f)->{return !f.isDirectory() ;}).collect(Collectors.toList());
+            List<? extends ZipEntry> files = zipFile.stream().filter((f)->{return !f.isDirectory() ;}).collect(Collectors.toList());
             files.parallelStream().forEach(f -> {
                 InputStream is = null;
                 try {
@@ -80,7 +75,7 @@ public class LuceneBuilder implements IndexBuilder{
         }else if(filePath.isDirectory()){
 
             File[] files = filePath.listFiles();
-            Arrays.stream(files).parallel().filter((f)->{return !f.isDirectory() ;}).forEach((f) -> {
+            Arrays.stream(files).filter((f)->{return !f.isDirectory() ;}).forEach((f) -> {
                 try{
                     org.jsoup.nodes.Document d = Jsoup.parse(f, "UTF-8");
                     addDocumento(d);
@@ -102,10 +97,17 @@ public class LuceneBuilder implements IndexBuilder{
         if(d==null)return;
 
         Document doc = new Document();
-        Field urlField = new Field("path", d.baseUri(), typeUrl);
-        Field contField = new Field("texto", d.normalise().text(), typeText);
+
+        Field urlField = new StringField("path", d.baseUri(), Field.Store.YES);
         doc.add(urlField);
+
+        FieldType typeText  = new FieldType();
+        typeText.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+        typeText.setStoreTermVectors(true);
+
+        Field contField = new Field("texto", d.text(), typeText);
         doc.add(contField);
+
         this.m_indexWriter.addDocument(doc);
     }
 }

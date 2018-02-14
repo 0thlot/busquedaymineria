@@ -5,6 +5,8 @@ import es.uam.eps.bmi.search.ranking.SearchRanking;
 import es.uam.eps.bmi.search.ranking.SearchRankingDoc;
 import org.apache.lucene.search.ScoreDoc;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Spliterator;
@@ -14,8 +16,11 @@ public class LuceneRanking implements SearchRanking{
 
     List<SearchRankingDoc> docs;
 
-    public LuceneRanking(Index index, ScoreDoc[] scores) {
-
+    public LuceneRanking(Index index, ScoreDoc[] scores) throws IOException {
+        docs = new ArrayList<>();
+        for(ScoreDoc score: scores){
+            docs.add(new SearchRankingDoc(score,index.getDocPath(score.doc)));
+        }
     }
 
     @Override
