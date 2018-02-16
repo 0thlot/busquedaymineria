@@ -14,7 +14,7 @@ public class IMPLSearchRanking implements SearchRanking {
 
     private IMPLSearchRankingIterator rankingIterator;
 
-    public IMPLSearchRanking(Index index, ScoreDoc[] scores){
+    public IMPLSearchRanking(Index index, IMPLDoc[] scores){
         this.rankingIterator = new IMPLSearchRankingIterator(index, scores);
     }
 

@@ -11,21 +11,19 @@ import java.io.IOException;
  */
 public class IMPLSearchRankingDoc extends SearchRankingDoc {
     Index index;
-    ScoreDoc rankedDoc;
+    IMPLDoc rankedDoc;
 
-    IMPLSearchRankingDoc (Index idx, ScoreDoc r) {
+    IMPLSearchRankingDoc (Index idx, IMPLDoc r) {
         super();
         index = idx;
         rankedDoc = r;
     }
 
     @Override
-    public double getScore() {
-        return rankedDoc.score;
-    }
+    public double getScore() { return (double) rankedDoc.getScore();  }
 
     @Override
     public String getPath() throws IOException {
-        return index.getDocPath(rankedDoc.doc);
+        return index.getDocPath(rankedDoc.getDocID());
     }
 }

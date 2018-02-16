@@ -12,11 +12,11 @@ import org.apache.lucene.search.ScoreDoc;
  * @author oscar
  */
 public class IMPLSearchRankingIterator implements SearchRankingIterator{
-    ScoreDoc results[];
+    IMPLDoc results[];
     Index index;
     int n = 0;
 
-    public IMPLSearchRankingIterator (Index idx, ScoreDoc r[]) {
+    public IMPLSearchRankingIterator (Index idx, IMPLDoc r[]) {
         index = idx;
         results = r;
     }
@@ -24,7 +24,7 @@ public class IMPLSearchRankingIterator implements SearchRankingIterator{
     // Empty result list
     public IMPLSearchRankingIterator () {
         index = null;
-        results = new ScoreDoc[0];
+        results = new IMPLDoc[0];
     }
 
     @Override

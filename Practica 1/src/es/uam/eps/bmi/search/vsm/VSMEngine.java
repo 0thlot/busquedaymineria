@@ -2,16 +2,19 @@ package es.uam.eps.bmi.search.vsm;
 
 import es.uam.eps.bmi.search.AbstractEngine;
 import es.uam.eps.bmi.search.index.Index;
+import es.uam.eps.bmi.search.ranking.impl.IMPLDoc;
 import es.uam.eps.bmi.search.ranking.impl.IMPLDocVector;
 import es.uam.eps.bmi.search.ranking.impl.IMPLSearchRanking;
-import org.apache.lucene.search.ScoreDoc;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
-
+/**
+ *
+ * @author jorge
+ * @author oscar
+ */
 public class VSMEngine extends AbstractEngine{
 
     private List<IMPLDocVector> vectorDoc;
@@ -75,15 +78,15 @@ public class VSMEngine extends AbstractEngine{
      *
      * @return
      */
-    private ScoreDoc[] listScores(int cutoff){
+    private IMPLDoc[] listScores(int cutoff){
 
         int minimo = Math.min(cutoff,vectorDoc.size());
-        ScoreDoc[] scores = new ScoreDoc[minimo];
+        IMPLDoc[] scores = new IMPLDoc[minimo];
 
         vectorDoc.sort((v1,v2)-> Float.compare(v2.modulo(),v1.modulo()));
 
         for (int i= 0; i<minimo;i++){
-           scores[i]=new ScoreDoc(vectorDoc.get(i).getDocID(), vectorDoc.get(i).modulo());
+           scores[i]=new IMPLDoc(vectorDoc.get(i).getDocID(), vectorDoc.get(i).modulo());
         }
         return scores;
     }
