@@ -6,27 +6,21 @@ import java.io.IOException;
 
 public abstract class SearchRankingDoc implements Comparable<SearchRankingDoc> {
 
-    private ScoreDoc scoreDoc;
-    private String ruta;
+    private double score;
+
 
     public SearchRankingDoc() {
     }
 
-    public SearchRankingDoc(ScoreDoc score, String ruta) {
-        this.scoreDoc = score;
-        this.ruta = ruta;
+    public SearchRankingDoc(ScoreDoc score) {
+        this.score = score.score;
     }
 
     @Override
     public int compareTo(SearchRankingDoc o) {
-        int pos = Double.compare(this.scoreDoc.score, o.scoreDoc.score);
 
-        if(pos!=0)return pos;
-
-        return Integer.compare(scoreDoc.doc,scoreDoc.doc);
-
+        return Double.compare(this.score, o.score);
     }
-
 
      public abstract double getScore() ;
 

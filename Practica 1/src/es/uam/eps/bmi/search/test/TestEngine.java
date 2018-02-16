@@ -11,6 +11,7 @@ import es.uam.eps.bmi.search.lucene.LuceneEngine;
 import es.uam.eps.bmi.search.ranking.SearchRanking;
 import es.uam.eps.bmi.search.ranking.SearchRankingDoc;
 import es.uam.eps.bmi.search.ui.TextResultDocRenderer;
+import es.uam.eps.bmi.search.vsm.VSMEngine;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,7 +82,7 @@ public class TestEngine {
         System.out.println("Checking search results");
 
         testSearch (new LuceneEngine(indexPath), query, 5);
-       // testSearch (new VSMEngine(new LuceneIndex(indexPath)), query, 5);
+        testSearch (new VSMEngine(new LuceneIndex(indexPath)), query, 5);
 
     }
 

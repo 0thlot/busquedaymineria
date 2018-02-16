@@ -1,21 +1,20 @@
-package es.uam.eps.bmi.search.ranking.lucene;
-
+package es.uam.eps.bmi.search.ranking.impl;
 import es.uam.eps.bmi.search.index.Index;
 import es.uam.eps.bmi.search.ranking.SearchRankingDoc;
 import org.apache.lucene.search.ScoreDoc;
-
 import java.io.IOException;
 
 /**
  *
- * @author pablo
+ * @author jorge
+ * @author oscar
  */
-public class LuceneRankingDoc extends SearchRankingDoc {
+public class IMPLSearchRankingDoc extends SearchRankingDoc {
     Index index;
     ScoreDoc rankedDoc;
-    
-    LuceneRankingDoc (Index idx, ScoreDoc r) {
-        super(r);
+
+    IMPLSearchRankingDoc (Index idx, ScoreDoc r) {
+        super();
         index = idx;
         rankedDoc = r;
     }
