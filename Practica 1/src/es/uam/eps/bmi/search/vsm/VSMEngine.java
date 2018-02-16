@@ -28,7 +28,7 @@ public class VSMEngine extends AbstractEngine{
      */
     @Override
     public IMPLSearchRanking search(String query, int cutoff) throws IOException {
-        int numeroDocumentos = index.getIndexReader().numDocs()
+        int numeroDocumentos = index.getIndexReader().numDocs();
         int palabrasConsulta = query.split(" ").length;
         int posPalabra = 0;
 
@@ -46,8 +46,8 @@ public class VSMEngine extends AbstractEngine{
                         vectorDoc.add(doc);
                     }
                 }
-                posPalabra += 1;
             }
+            posPalabra += 1;
         }
 
         return new IMPLSearchRanking(index, listScores());
@@ -74,12 +74,16 @@ public class VSMEngine extends AbstractEngine{
      * @return
      */
     private ScoreDoc[] listScores(){
-        List<ScoreDoc> scores = new ArrayList<ScoreDoc>();
-        while(vectorDoc.iterator().hasNext()){
+        //List<ScoreDoc> scores = new ArrayList<ScoreDoc>();
+        ScoreDoc[] scores = new ScoreDoc[vectorDoc.size()];
+        /*while(vectorDoc.iterator().hasNext()){
             scores.add(new ScoreDoc(vectorDoc.iterator().next().getDocID(),
                     (float) vectorDoc.iterator().next().modulo()));
+        }*/
+        for (int i= 0; i<vectorDoc.size();i++){
+           scores[i]=new ScoreDoc(vectorDoc.get(i).getDocID(), vectorDoc.get(i).modulo());
         }
-        return (ScoreDoc[]) scores.toArray();
+        return scores;
     }
 
 }
