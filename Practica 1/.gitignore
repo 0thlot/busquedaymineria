@@ -24,8 +24,8 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-/resource/*.html
+/resources/*.html
 .idea/workspace.xml
-resource/
+resources/
 !/lib/jsoup-1.11.2.jar
 /resources/*
