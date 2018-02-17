@@ -11,6 +11,8 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.jsoup.Jsoup;
 
 import java.io.File;
@@ -67,7 +69,7 @@ public class LuceneBuilder implements IndexBuilder{
                 InputStream is;
                 try {
                     is = zipFile.getInputStream(f);
-                    org.jsoup.nodes.Document d = Jsoup.parse(is,"UTF-8",collectionPath+f.getName());
+                    org.jsoup.nodes.Document d = Jsoup.parse(is,"UTF-8",collectionPath+"/"+f.getName());
                     if(is != null)is.close();
                     addDocumento(d);
                 } catch (IOException e) {
@@ -76,12 +78,23 @@ public class LuceneBuilder implements IndexBuilder{
             });
 
         }else if(filePath.isDirectory()){
-
+            java.util.logging.Logger.getLogger("org.apache.pdfbox")
+                    .setLevel(java.util.logging.Level.OFF);
             File[] files = filePath.listFiles();
             Arrays.stream(files).filter((f)-> !f.isDirectory()).forEach((f) -> {
                 try{
-                    org.jsoup.nodes.Document d = Jsoup.parse(f, "UTF-8");
+                    org.jsoup.nodes.Document d=null;
+                    if(f.getName().endsWith(".pdf")){
+                        PDDocument pdf = PDDocument.load(f);
+                        PDFTextStripper pdfParse = new PDFTextStripper();
+                        String pdfText = pdfParse.getText(pdf);
+                        d = Jsoup.parse(pdfText,f.getAbsolutePath());
+                        pdf.close();
+                    }else{
+                        d = Jsoup.parse(f, "UTF-8");
+                    }
                     addDocumento(d);
+
                 }catch (IOException e){
                     throw new RuntimeException(e);
                 }
