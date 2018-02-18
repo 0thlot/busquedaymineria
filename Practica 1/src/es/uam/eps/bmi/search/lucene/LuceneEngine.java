@@ -7,9 +7,8 @@ import es.uam.eps.bmi.search.ranking.lucene.LuceneRanking;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.*;
-
-
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.TopDocs;
 
 import java.io.IOException;
 

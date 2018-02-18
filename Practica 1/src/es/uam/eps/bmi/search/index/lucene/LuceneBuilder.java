@@ -65,6 +65,7 @@ public class LuceneBuilder implements IndexBuilder{
         }else if(collectionPath.endsWith(".zip")){
             ZipFile zipFile = new ZipFile(collectionPath);
             List<? extends ZipEntry> files = zipFile.stream().filter((f)-> !f.isDirectory()).collect(Collectors.toList());
+
             files.parallelStream().forEach(f -> {
                 InputStream is;
                 try {
