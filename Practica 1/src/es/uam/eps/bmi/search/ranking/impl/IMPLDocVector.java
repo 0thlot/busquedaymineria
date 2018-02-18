@@ -1,6 +1,6 @@
 package es.uam.eps.bmi.search.ranking.impl;
-import static java.lang.Math.log;
 import static java.lang.Math.sqrt;
+import static org.apache.lucene.search.similarities.SimilarityBase.log2;
 
 /**
  *  Clase que funciona como vector de un documento
@@ -29,7 +29,7 @@ public class IMPLDocVector {
      * @param freqIndex Frecuencia de la palabra en t0do el indice.
      */
     public void añadirPalabra(int posPalabra, float freqDoc, float freqIndex){
-        puntuaciones[posPalabra] = td(freqDoc)-idf(freqIndex);
+        puntuaciones[posPalabra] = td(freqDoc)*idf(freqIndex);
     }
 
     /**
@@ -52,7 +52,7 @@ public class IMPLDocVector {
      * @return resultado de la funcion
      */
     private float td(float freqDoc){
-        return  1+(float)log(freqDoc);
+        return  1+(float)log2(freqDoc);
     }
 
     /** Funcion idf
@@ -60,7 +60,7 @@ public class IMPLDocVector {
      * @return resultad de la funcion
      */
     private float idf(float freqIndex){
-        return (float)log((float) numIndexDocs/freqIndex);
+        return (float)(1+log2((float) numIndexDocs/freqIndex));
 
     }
 }
