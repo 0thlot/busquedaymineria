@@ -5,8 +5,10 @@ import es.uam.eps.bmi.search.index.Index;
 import es.uam.eps.bmi.search.ranking.impl.IMPLDoc;
 import es.uam.eps.bmi.search.ranking.impl.IMPLDocVector;
 import es.uam.eps.bmi.search.ranking.impl.IMPLSearchRanking;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -34,44 +36,20 @@ public class VSMEngine extends AbstractEngine{
     @Override
     public IMPLSearchRanking search(String query, int cutoff) throws IOException {
         int numeroDocumentos = index.getIndexReader().numDocs();
-        int palabrasConsulta = query.split(" ").length;
-        int posPalabra = 0;
+        String[] palabras =  query.toLowerCase().split(" ");
 
-        //Generamos los vectores para cada documento
-        for (String palabra : query.toLowerCase().split(" ")) {
-            for (int docID = 0; docID < numeroDocumentos; docID++) { // Recorriendo la lista de postings de cada palabra
-                long freq = index.getTermFreq(palabra, docID);
-                if (freq > 0) {
-                    int docIDexistente = isDocOnList(docID);    // Si Esta el documento en la lista de vectores
-                    if (docIDexistente > -1) {                  // Actualizamos los datos del documento
-                        vectorDoc.get(docIDexistente).añadirPalabra(posPalabra, freq, index.getDocFreq(palabra));
-                    } else {                                    // Si no esta el documento, lo creamos de nuevo
-                        IMPLDocVector doc = new IMPLDocVector(palabrasConsulta, docID, numeroDocumentos);
-                        doc.añadirPalabra(posPalabra, freq, index.getDocFreq(palabra));
-                        vectorDoc.add(doc);
-                    }
-                }
+        for(int docID = 0; docID < numeroDocumentos; docID++){
+            IMPLDocVector doc = new IMPLDocVector(docID, numeroDocumentos);
+            for(String palabra:palabras){
+                doc.añadirPalabra(index.getTermFreq(palabra, docID),index.getDocFreq(palabra));
             }
-            posPalabra += 1;
+            vectorDoc.add(doc);
         }
 
         return new IMPLSearchRanking(index, listScores(cutoff));
     }
 
-    /**
-     *  Comprueba que el documento se encuentra en la lista
-     *  de puntuaciones
-     *
-     * @param docID
-     * @return posicion del documento, -1 si el documento no esta en la lista
-     */
-    private int isDocOnList(int docID){
-        for (int i=0; i<vectorDoc.size();i++)
-            if (vectorDoc.get(i).getDocID() == docID)
-                return i;
-        return -1;
 
-    }
 
     /**
      *
@@ -82,13 +60,18 @@ public class VSMEngine extends AbstractEngine{
 
         int minimo = Math.min(cutoff,vectorDoc.size());
         IMPLDoc[] scores = new IMPLDoc[minimo];
+        int i,num;
 
-        vectorDoc.sort((v1,v2)-> Float.compare(v2.modulo(),v1.modulo()));
+        vectorDoc.sort((v1,v2)-> Double.compare(v2.sumPuntuaciones(),v1.sumPuntuaciones()));
 
-        for (int i= 0; i<minimo;i++){
-           scores[i]=new IMPLDoc(vectorDoc.get(i).getDocID(), vectorDoc.get(i).modulo());
+        for (i= 0,num=0; i<minimo;i++){
+            double score=vectorDoc.get(i).sumPuntuaciones();
+            if(score>0){
+                scores[i]=new IMPLDoc(vectorDoc.get(i).getDocID(), score);
+                num++;
+            }
         }
-        return scores;
+        return  Arrays.copyOf(scores,num);
     }
 
 }

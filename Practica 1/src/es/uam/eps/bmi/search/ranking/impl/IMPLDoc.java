@@ -9,14 +9,14 @@ package es.uam.eps.bmi.search.ranking.impl;
 public class IMPLDoc {
 
     int docID;
-    float score;
+    double score;
 
-    public IMPLDoc(int docID, float score){
+    public IMPLDoc(int docID, double score){
         this.docID = docID;
         this.score = score;
     }
 
-    public float getScore(){  return score; }
+    public double getScore(){  return score; }
 
     public int getDocID(){  return docID; }
 }

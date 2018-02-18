@@ -1,5 +1,8 @@
 package es.uam.eps.bmi.search.ranking.impl;
-import static java.lang.Math.sqrt;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.apache.lucene.search.similarities.SimilarityBase.log2;
 
 /**
@@ -11,56 +14,54 @@ import static org.apache.lucene.search.similarities.SimilarityBase.log2;
  */
 public class IMPLDocVector {
     private int docID;
-    private int tamanio;
     private int numIndexDocs;
-    private double[] puntuaciones;
+    private List<Double> puntuaciones;
 
-    public IMPLDocVector(int tamanio, int docID, int numIndexDocs){
-        this.tamanio = tamanio;
+    /**
+     *
+     * @param docID
+     * @param numIndexDocs
+     */
+    public IMPLDocVector( int docID, int numIndexDocs){
         this.docID = docID;
         this.numIndexDocs = numIndexDocs;
-        puntuaciones = new double[tamanio];
+        puntuaciones = new ArrayList<>();
     }
 
     /** Añade una nueva palabra encontrada en el documento
      * guardando su valoracion en el vector del documento
-     * @param posPalabra Posicion de la palabra en la busqueda
      * @param freqDoc Frecuencia de la palabra en el documento
      * @param freqIndex Frecuencia de la palabra en t0do el indice.
      */
-    public void añadirPalabra(int posPalabra, float freqDoc, float freqIndex){
-        puntuaciones[posPalabra] = td(freqDoc)*idf(freqIndex);
+    public void añadirPalabra(float freqDoc, float freqIndex){
+        puntuaciones.add(tf(freqDoc)*idf(freqIndex));
     }
 
     /**
      * @return modulo del vector del documento
      */
-    public float modulo(){
-        float modulo=0;
-        for (int i=0; i<tamanio;i++){
-            modulo += puntuaciones[i];
-        }
-        return (float) ((modulo>=0)?sqrt(modulo):0);
+    public double sumPuntuaciones(){
+        return  puntuaciones.stream().mapToDouble(Double::doubleValue).sum();
     }
 
     public int getDocID(){
         return docID;
     }
 
-    /** Funcion td
+    /** Funcion tf
      * @param freqDoc Frecuencia de la palabra en el documento
      * @return resultado de la funcion
      */
-    private float td(float freqDoc){
-        return  1+(float)log2(freqDoc);
+    private double tf(double freqDoc){
+        return  (freqDoc>0)?1+log2(freqDoc):0;
     }
 
     /** Funcion idf
      * @param freqIndex Frecuencia de la palabra en t0do el indice.
      * @return resultad de la funcion
      */
-    private float idf(float freqIndex){
-        return (float)(1+log2((float) numIndexDocs/freqIndex));
+    private double idf(double freqIndex){
+        return  (log2((double)1+(numIndexDocs/(1+freqIndex))));
 
     }
 }
