@@ -1,6 +1,7 @@
 package es.uam.eps.bmi.search.index.lucene;
 
 import es.uam.eps.bmi.search.index.IndexBuilder;
+import es.uam.eps.bmi.search.index.freq.TermFreq;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -15,10 +16,12 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.jsoup.Jsoup;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -26,13 +29,14 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import static org.apache.lucene.search.similarities.SimilarityBase.log2;
+
 public class LuceneBuilder implements IndexBuilder{
 
     private IndexWriter m_indexWriter;
 
 
     public LuceneBuilder() {
-
     }
 
     @Override
@@ -70,7 +74,7 @@ public class LuceneBuilder implements IndexBuilder{
                 InputStream is;
                 try {
                     is = zipFile.getInputStream(f);
-                    org.jsoup.nodes.Document d = Jsoup.parse(is,"UTF-8",collectionPath+"/"+f.getName());
+                    org.jsoup.nodes.Document d = Jsoup.parse(is,"UTF-8",filePath.getAbsolutePath()+"\\"+f.getName());
                     if(is != null)is.close();
                     addDocumento(d);
                 } catch (IOException e) {
@@ -104,8 +108,32 @@ public class LuceneBuilder implements IndexBuilder{
         }else{
             throw new IOException();
         }
-
         this.m_indexWriter.close();
+
+        writeModulo(indexPath);
+    }
+
+    private void writeModulo(String indexRuta) throws IOException {
+        LuceneIndex i = new LuceneIndex(indexRuta);
+        int numeroDocumentos = i.getIndexReader().numDocs();
+        Path ruta = Paths.get(indexRuta+"/modulo.txt");
+        double sum=0, tf=0,idf=0;
+
+
+        try (BufferedWriter w = Files.newBufferedWriter(ruta)) {
+            for (int docID = 0; docID < numeroDocumentos; docID++) {
+                sum=0;
+                for(TermFreq term:i.getDocVector(docID)){
+                    tf=(term.getFreq()>0)?1+log2(term.getFreq()):0;
+                    idf = (log2((double)1+(numeroDocumentos/(1+i.getTotalFreq(term.getTerm())))));
+                    sum+= Math.pow(tf,2)* Math.pow(idf,2);
+                }
+                w.write(docID+"\t"+Math.sqrt(sum));
+                w.newLine();
+            }
+        }
+
+
 
     }
 

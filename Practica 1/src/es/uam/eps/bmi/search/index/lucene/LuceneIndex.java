@@ -6,15 +6,20 @@ import es.uam.eps.bmi.search.index.freq.lucene.LuceneFreqVector;
 import org.apache.lucene.index.*;
 import org.apache.lucene.store.FSDirectory;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LuceneIndex implements Index{
 
     private IndexReader m_indexReader;
     private List<String> termList;
+    private Map<Integer,Double> moduloDoc;
 
     /**
      *
@@ -32,6 +37,25 @@ public class LuceneIndex implements Index{
         while (terms.next() != null) {
             termList.add(terms.term().utf8ToString());
         }
+
+        moduloDoc = new HashMap<>();
+
+        readModulo(indexPath);
+
+    }
+
+    private void readModulo(String indexPath) throws IOException {
+        File filePath = new File(indexPath+"/modulo.txt");
+
+        if (!filePath.exists()) {
+            return;
+        }
+        List<String> strings = Files.readAllLines(filePath.toPath());
+        strings.forEach(s -> {
+               String[] datos = s.split("\t");
+               moduloDoc.put(Integer.valueOf(datos[0]),Double.valueOf(datos[1]));
+        });
+
 
     }
 
@@ -73,6 +97,13 @@ public class LuceneIndex implements Index{
     @Override
     public IndexReader getIndexReader() {
         return this.m_indexReader;
+    }
+
+    @Override
+    public Double getModuloDoc(int docId) {
+        if(moduloDoc.containsKey(docId))
+            return moduloDoc.get(docId);
+        return null;
     }
 
 

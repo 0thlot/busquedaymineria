@@ -73,7 +73,7 @@ public class InterfazUI{
         SearchRanking ranking = engine.search(query.trim(), 10);
         if(ranking.size()>0){
             for (SearchRankingDoc result : ranking)
-                System.out.println("\t" + "Score: "+ANSI_GREEN +result.getScore()+ANSI_RESET+ " Ruta: "+result.getPath());
+                System.out.println("\t" + "Score: "+ANSI_GREEN +result.getScore()+ANSI_RESET+ " Ruta: "+result.getPath()+": 1");
             System.out.println("\n");
         }else{
             System.out.println("Sin resultados");

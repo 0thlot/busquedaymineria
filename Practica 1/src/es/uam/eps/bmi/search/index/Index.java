@@ -11,21 +11,21 @@ public interface Index {
      *
      * @return
      */
-    public List<String> getAllTerms();
+    List<String> getAllTerms();
 
     /**
      *
      * @param palabra
      * @return
      */
-    public long getTotalFreq(String palabra) throws IOException;
+    long getTotalFreq(String palabra) throws IOException;
 
     /**
      *
      * @param docIS
      * @return
      */
-    public FreqVector getDocVector(int docIS) throws IOException;
+    FreqVector getDocVector(int docIS) throws IOException;
 
     /**
      * Guarda la relacion asociada a un documento.
@@ -33,7 +33,7 @@ public interface Index {
      * @param docID ID del documento.
      * @return direccion del documento.
      */
-    public String getDocPath(int docID) throws IOException;
+    String getDocPath(int docID) throws IOException;
 
     /**
      *
@@ -41,16 +41,18 @@ public interface Index {
      * @param docID
      * @return
      */
-    public long getTermFreq(String palabra, int docID) throws IOException;
+    long getTermFreq(String palabra, int docID) throws IOException;
 
     /**
      *
      * @param palabra
      * @return
      */
-    public int getDocFreq(String palabra) throws IOException;
+    int getDocFreq(String palabra) throws IOException;
 
-    public IndexReader getIndexReader();
+    IndexReader getIndexReader();
+
+    Double getModuloDoc(int docId);
 
 
 }

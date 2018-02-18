@@ -15,6 +15,7 @@ import static org.apache.lucene.search.similarities.SimilarityBase.log2;
 public class IMPLDocVector {
     private int docID;
     private int numIndexDocs;
+    private Double moduloDoc;
     private List<Double> puntuaciones;
 
     /**
@@ -22,10 +23,11 @@ public class IMPLDocVector {
      * @param docID
      * @param numIndexDocs
      */
-    public IMPLDocVector( int docID, int numIndexDocs){
+    public IMPLDocVector( int docID, int numIndexDocs, Double moduloDoc){
         this.docID = docID;
         this.numIndexDocs = numIndexDocs;
         puntuaciones = new ArrayList<>();
+        this.moduloDoc = moduloDoc;
     }
 
     /** Añade una nueva palabra encontrada en el documento
@@ -41,7 +43,7 @@ public class IMPLDocVector {
      * @return modulo del vector del documento
      */
     public double sumPuntuaciones(){
-        return  puntuaciones.stream().mapToDouble(Double::doubleValue).sum();
+        return  (moduloDoc!=null)?puntuaciones.stream().mapToDouble(Double::doubleValue).sum()/moduloDoc:puntuaciones.stream().mapToDouble(Double::doubleValue).sum();
     }
 
     public int getDocID(){

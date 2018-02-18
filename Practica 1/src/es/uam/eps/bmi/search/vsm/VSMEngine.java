@@ -39,7 +39,7 @@ public class VSMEngine extends AbstractEngine{
         String[] palabras =  query.toLowerCase().split(" ");
 
         for(int docID = 0; docID < numeroDocumentos; docID++){
-            IMPLDocVector doc = new IMPLDocVector(docID, numeroDocumentos);
+            IMPLDocVector doc = new IMPLDocVector(docID, numeroDocumentos,index.getModuloDoc(docID));
             for(String palabra:palabras){
                 doc.añadirPalabra(index.getTermFreq(palabra, docID),index.getDocFreq(palabra));
             }
