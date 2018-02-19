@@ -35,7 +35,7 @@ public class IMPLDocVector {
      * @param freqDoc Frecuencia de la palabra en el documento
      * @param freqIndex Frecuencia de la palabra en t0do el indice.
      */
-    public void añadirPalabra(float freqDoc, float freqIndex){
+    public void anyadirPalabra(float freqDoc, float freqIndex){
         puntuaciones.add(tf(freqDoc)*idf(freqIndex));
     }
 

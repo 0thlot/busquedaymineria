@@ -41,7 +41,7 @@ public class VSMEngine extends AbstractEngine{
         for(int docID = 0; docID < numeroDocumentos; docID++){
             IMPLDocVector doc = new IMPLDocVector(docID, numeroDocumentos,index.getModuloDoc(docID));
             for(String palabra:palabras){
-                doc.añadirPalabra(index.getTermFreq(palabra, docID),index.getDocFreq(palabra));
+                doc.anyadirPalabra(index.getTermFreq(palabra, docID),index.getDocFreq(palabra));
             }
             vectorDoc.add(doc);
         }
