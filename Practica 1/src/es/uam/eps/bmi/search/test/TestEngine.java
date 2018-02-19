@@ -5,13 +5,14 @@ import es.uam.eps.bmi.search.index.Index;
 import es.uam.eps.bmi.search.index.IndexBuilder;
 import es.uam.eps.bmi.search.index.freq.FreqVector;
 import es.uam.eps.bmi.search.index.freq.TermFreq;
-import es.uam.eps.bmi.search.index.lucene.LuceneIndex;
 import es.uam.eps.bmi.search.index.lucene.LuceneBuilder;
+import es.uam.eps.bmi.search.index.lucene.LuceneIndex;
 import es.uam.eps.bmi.search.lucene.LuceneEngine;
-import es.uam.eps.bmi.search.vsm.VSMEngine;
 import es.uam.eps.bmi.search.ranking.SearchRanking;
 import es.uam.eps.bmi.search.ranking.SearchRankingDoc;
 import es.uam.eps.bmi.search.ui.TextResultDocRenderer;
+import es.uam.eps.bmi.search.vsm.VSMEngine;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,8 +29,8 @@ import java.util.List;
 public class TestEngine {
     public static void main (String a[]) throws IOException {
         testCollection ("src/es/uam/eps/bmi/search/ranking", "index/src", "size", "public abstract");
-        testCollection ("collections/docs1k.zip", "index/docs", "seat", "obama family tree");
-        testCollection ("collections/urls.txt", "index/urls", "wikipedia", "information probability");
+        testCollection ("resources/docs1k.zip", "index/docs", "seat", "obama family tree");
+        testCollection ("resources/urls.txt", "index/urls", "wikipedia", "information probability");
     }
     
     static void testCollection(String collectionPath, String indexPath, String word, String query) throws IOException {
@@ -46,7 +47,7 @@ public class TestEngine {
         builder.build(collectionPath, indexPath);
         
         // Pruebas de inspección del índice
-        
+
         Index index = new LuceneIndex(indexPath);
         List<String> terms = new ArrayList<String>(index.getAllTerms());
         Collections.sort(terms, new Comparator<String>() {
@@ -82,8 +83,9 @@ public class TestEngine {
 
         testSearch (new LuceneEngine(indexPath), query, 5);
         testSearch (new VSMEngine(new LuceneIndex(indexPath)), query, 5);
+
     }
-    
+
     static void testSearch (SearchEngine engine, String query, int cutoff) throws IOException {
         System.out.println("  " + engine.getClass().getSimpleName() 
                 + ": top " + cutoff + " for query '" + query + "'");
