@@ -5,7 +5,12 @@ import org.apache.lucene.index.IndexReader;
 
 import java.io.IOException;
 import java.util.List;
-
+/** Interfaz Index
+ *
+ * @version 1.0
+ * @author jorge
+ * @author oscar
+ */
 public interface Index {
     /**
      *

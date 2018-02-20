@@ -30,7 +30,16 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static org.apache.lucene.search.similarities.SimilarityBase.log2;
-
+/** Permite generar un indice desde:
+ *
+ * - Una carpeta (html, pdf, texto plano)
+ * - .txt con direcciones
+ * - .zip (html)
+ *
+ * @version 1.0
+ * @author jorge
+ * @author oscar
+ */
 public class LuceneBuilder implements IndexBuilder{
 
     private IndexWriter m_indexWriter;
@@ -132,9 +141,6 @@ public class LuceneBuilder implements IndexBuilder{
                 w.newLine();
             }
         }
-
-
-
     }
 
     private void addDocumento(org.jsoup.nodes.Document d ) throws IOException {

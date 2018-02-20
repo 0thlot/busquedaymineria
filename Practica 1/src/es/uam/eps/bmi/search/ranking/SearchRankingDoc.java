@@ -4,6 +4,12 @@ import org.apache.lucene.search.ScoreDoc;
 
 import java.io.IOException;
 
+/** Contiene la puntiacion de la busqueda y permite compararlos
+ *
+ * @version 1.0
+ * @author jorge
+ * @author oscar
+ */
 public abstract class SearchRankingDoc implements Comparable<SearchRankingDoc> {
 
     private double score;

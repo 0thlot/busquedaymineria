@@ -37,6 +37,7 @@ public class VSMEngine extends AbstractEngine{
     public IMPLSearchRanking search(String query, int cutoff) throws IOException {
         int numeroDocumentos = index.getIndexReader().numDocs();
         String[] palabras =  query.toLowerCase().split(" ");
+        vectorDoc = new ArrayList<>();
 
         for(int docID = 0; docID < numeroDocumentos; docID++){
             IMPLDocVector doc = new IMPLDocVector(docID, numeroDocumentos,index.getModuloDoc(docID));
