@@ -1,21 +1,33 @@
+
 package es.uam.eps.bmi.search.ui;
 
 import es.uam.eps.bmi.search.SearchEngine;
-import es.uam.eps.bmi.search.lucene.LuceneEngine;
+import es.uam.eps.bmi.search.index.lucene.LuceneIndex;
 import es.uam.eps.bmi.search.ranking.SearchRanking;
 import es.uam.eps.bmi.search.ranking.SearchRankingDoc;
+import es.uam.eps.bmi.search.vsm.VSMEngine;
 
 import java.io.IOException;
 import java.util.Scanner;
 
+/** Clase que sirve de interfaz para probar VSMEngine
+ *
+ * @version 1.0
+ * @author jorge
+ * @author oscar
+ */
 public class InterfazUI{
 
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_PURPLE = "\u001B[35m";
 
-
+    /**
+     * Main que permite ejecutar la interfaz
+     * @param a None
+     * @throws IOException
+     */
     public static void main (String a[]) throws IOException {
 
         boolean finalizar=true,salir=true;
@@ -35,7 +47,7 @@ public class InterfazUI{
                 id = getNumber();
                 ruta = IndexSource.routeIndex(id);
             }while (ruta==null);
-            engine = new LuceneEngine(ruta);
+            engine =new VSMEngine(new LuceneIndex(ruta));
             salir = true;
             do{
 
@@ -68,12 +80,18 @@ public class InterfazUI{
 
     }
 
-    static void busqueda (SearchEngine engine, String query) throws IOException {
-        System.out.println(" \nQuery procesada:'" + query + "'");
-        SearchRanking ranking = engine.search(query.trim(), 10);
+    /**
+     *
+     * @param engine Searchengine para hacer la busqueda
+     * @param query Expresion a buscar
+     * @throws IOException
+     */
+    private static void busqueda(SearchEngine engine, String query) throws IOException {
+        System.out.println(" \nQuery procesada:'" + query.toLowerCase().trim() + "'");
+        SearchRanking ranking = engine.search(query.toLowerCase().trim(), 10);
         if(ranking.size()>0){
             for (SearchRankingDoc result : ranking)
-                System.out.println("\t" + "Score: "+ANSI_GREEN +result.getScore()+ANSI_RESET+ " Ruta: "+result.getPath()+": 1");
+                System.out.println("\t" + "Score: "+ANSI_GREEN +result.getScore()+ANSI_RESET+ " Ruta: "+result.getPath());
             System.out.println("\n");
         }else{
             System.out.println("Sin resultados");
@@ -81,6 +99,10 @@ public class InterfazUI{
 
     }
 
+    /**
+     * Obtiene un numero por teclado
+     * @return mumero
+     */
     private static int getNumber(){
         Scanner s = new Scanner(System.in);
         do {

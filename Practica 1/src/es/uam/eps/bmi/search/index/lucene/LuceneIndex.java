@@ -14,7 +14,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/** Carga un indice Lucene y los modulos del documento
+ *
+ * @version 1.0
+ * @author jorge
+ * @author oscar
+ */
 public class LuceneIndex implements Index{
 
     private IndexReader m_indexReader;
@@ -22,8 +27,8 @@ public class LuceneIndex implements Index{
     private Map<Integer,Double> moduloDoc;
 
     /**
-     *
-     * @param indexPath
+     * Carga un indice lucene y los modulos al document
+     * @param indexPath ruta al indice
      * @throws IOException
      */
     public LuceneIndex(String indexPath) throws IOException {
@@ -44,6 +49,11 @@ public class LuceneIndex implements Index{
 
     }
 
+    /**
+     * Si el indice tiene un fichero con los modulos, los carga en el documento
+     * @param indexPath ruta al indice
+     * @throws IOException
+     */
     private void readModulo(String indexPath) throws IOException {
         File filePath = new File(indexPath+"/modulo.txt");
 
