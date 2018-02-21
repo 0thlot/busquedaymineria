@@ -32,3 +32,5 @@ resources/
 
 /resources/*
 !/lib/pdfbox-app-2.0.8.jar
+!/bmi-p1-11/lib/pdfbox-app-2.0.8.jar
+!/bmi-p1-11.zip

@@ -9,16 +9,25 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
+
+/** Clase que sirve para sacar la frecuencia de los terminos
+ *
+ * @version 1.0
+ * @author jorge
+ * @author oscar
+ */
 public class TermStats {
     public static void main (String a[]) throws IOException {
         freqTerminos  ("index/docs");
-
     }
 
+    /**
+     * Escribe los dos ficheros con las frecuencias de repeticion y aparicion en ficheros
+     * @param pathIndex ruta al indice
+     * @throws IOException
+     */
     private static void freqTerminos(String pathIndex) throws IOException {
 
         System.out.println("Creando el indice");
