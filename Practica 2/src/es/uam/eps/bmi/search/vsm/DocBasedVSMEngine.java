@@ -26,9 +26,11 @@ public class DocBasedVSMEngine extends AbstractVSMEngine {
 
         for(String t: terms){
             PostingsListIterator pl = (PostingsListIterator) index.getPostings(t).iterator();
-            Posting p = pl.next();
-            heapDocId.add(new ImplPosting(p.getDocID(),p.getFreq(),t));
-            listPostings.put(t,pl);
+            if(pl!=null && pl.hasNext()){
+                Posting p = pl.next();
+                heapDocId.add(new ImplPosting(p.getDocID(),p.getFreq(),t));
+                listPostings.put(t,pl);
+            }
         }
         do{
             if(heapDocId.isEmpty()) break;
@@ -38,11 +40,11 @@ public class DocBasedVSMEngine extends AbstractVSMEngine {
                 mapDocScore.put(head.getDocID(), (long) 0);
             }
             mapDocScore.replace(head.getDocID(),mapDocScore.get(head.getDocID())+tfidf(head.getFreq(),index.getDocFreq(head.getTerm()),index.numDocs());
-
-            heapDocId.add(listPostings.get(head.g))
-
-
-
+            PostingsListIterator pl = listPostings.get(head.getTerm());
+            if(pl!=null && pl.hasNext()){
+                Posting p = pl.next();
+                heapDocId.add(new ImplPosting(p.getDocID(),p.getFreq(),head.getTerm()));
+            }
         }while(true);
 
 
