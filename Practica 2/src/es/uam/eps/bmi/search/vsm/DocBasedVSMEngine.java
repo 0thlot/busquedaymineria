@@ -22,7 +22,7 @@ public class DocBasedVSMEngine extends AbstractVSMEngine {
 
         PriorityQueue<ImplPosting> heapDocId = new PriorityQueue<>(terms.length);
         HashMap<String,PostingsListIterator> listPostings = new HashMap<>();
-        HashMap<Integer,Long> mapDocScore = new HashMap<>();
+        HashMap<Integer,Double> mapDocScore = new HashMap<>();
 
         for(String t: terms){
             PostingsListIterator pl = (PostingsListIterator) index.getPostings(t).iterator();
@@ -32,20 +32,30 @@ public class DocBasedVSMEngine extends AbstractVSMEngine {
                 listPostings.put(t,pl);
             }
         }
+        int beforeDocId = -1;
         do{
             if(heapDocId.isEmpty()) break;
             ImplPosting head=heapDocId.poll();
             if(head==null)break;
-            if(!mapDocScore.containsKey(head.getDocID())){
-                mapDocScore.put(head.getDocID(), (long) 0);
+
+            if(beforeDocId != -1 && beforeDocId!=head.getDocID()){
+
+
+
             }
-            mapDocScore.replace(head.getDocID(),mapDocScore.get(head.getDocID())+tfidf(head.getFreq(),index.getDocFreq(head.getTerm()),index.numDocs());
+            beforeDocId = head.getDocID();
+            if(!mapDocScore.containsKey(head.getDocID())){
+                mapDocScore.put(head.getDocID(), (double) 0);
+            }
+            mapDocScore.replace(head.getDocID(),mapDocScore.get(head.getDocID())+tfidf(head.getFreq(),index.getDocFreq(head.getTerm()),index.numDocs()));
             PostingsListIterator pl = listPostings.get(head.getTerm());
             if(pl!=null && pl.hasNext()){
                 Posting p = pl.next();
                 heapDocId.add(new ImplPosting(p.getDocID(),p.getFreq(),head.getTerm()));
+            }else{
+                listPostings.remove(head.getTerm());
             }
-        }while(true);
+        }while(!listPostings.isEmpty());
 
 
 
