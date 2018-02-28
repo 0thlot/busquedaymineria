@@ -39,7 +39,7 @@ public class TestEngine {
 
         // Construcción
         new LuceneForwardIndexBuilder().build(collPath, baseIndexPath + "/lucene/forward");
-        new LuceneBuilder().build(collPath, baseIndexPath + "/lucene");
+        //new LuceneBuilder().build(collPath, baseIndexPath + "/lucene");
        /* new SerializedRAMIndexBuilder().build(collPath, baseIndexPath + "/ram");
         new DiskIndexBuilder().build(collPath, baseIndexPath + "/disk");
 //        
@@ -54,7 +54,7 @@ public class TestEngine {
         System.out.println("-----------------------");
         System.out.println("Checking index correction on URL collection");
         testIndex(new LuceneForwardIndex(baseIndexPath + "/lucene/forward"), "information");
-        testIndex(new LuceneIndex(baseIndexPath + "/lucene"), "information");
+       // testIndex(new LuceneIndex(baseIndexPath + "/lucene"), "information");
         //testIndex(new SerializedRAMIndex(baseIndexPath + "/ram"), "information");
         //testIndex(new DiskIndex(baseIndexPath + "/disk"), "information");
 
@@ -74,7 +74,7 @@ public class TestEngine {
         System.out.println("Checking engine results on URL collection");
         String query = "information probability";
         Index luceneFwdIndex = new LuceneForwardIndex(baseIndexPath + "/lucene/forward");
-        Index luceneIndex = new LuceneIndex(baseIndexPath + "/lucene");
+        //Index luceneIndex = new LuceneIndex(baseIndexPath + "/lucene");
         //Index ramIndex = new SerializedRAMIndex(baseIndexPath + "/ram");
         //Index diskIndex = new DiskIndex(baseIndexPath + "/disk");
         
@@ -85,7 +85,7 @@ public class TestEngine {
         testSearch(new TermBasedVSMEngine(ramIndex), query, 5);
         testSearch(new TermBasedVSMEngine(diskIndex), query, 5);
         */
-        testSearch(new DocBasedVSMEngine(luceneIndex), query, 5);
+        //testSearch(new DocBasedVSMEngine(luceneIndex), query, 5);
         //testSearch(new DocBasedVSMEngine(ramIndex), query, 5);
         //testSearch(new DocBasedVSMEngine(diskIndex), query, 5);
         
