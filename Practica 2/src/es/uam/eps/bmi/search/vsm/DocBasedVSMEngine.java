@@ -7,11 +7,15 @@ import es.uam.eps.bmi.search.index.structure.PostingsListIterator;
 import es.uam.eps.bmi.search.index.structure.impl.ImplPosting;
 import es.uam.eps.bmi.search.index.structure.lucene.LucenePostingsList;
 import es.uam.eps.bmi.search.ranking.SearchRanking;
+import es.uam.eps.bmi.search.ranking.impl.RankingImpl;
+import es.uam.eps.bmi.search.ranking.impl.RankingImplDoc;
 
 import java.io.IOException;
 import java.util.*;
 
 public class DocBasedVSMEngine extends AbstractVSMEngine {
+
+    private List<RankingImplDoc> vectorDoc;
     public DocBasedVSMEngine(Index index) {
         super(index);
     }
@@ -19,10 +23,12 @@ public class DocBasedVSMEngine extends AbstractVSMEngine {
     @Override
     public SearchRanking search(String query, int cutoff) throws IOException {
         String[] terms = parse(query);
+        RankingImpl ranking = new RankingImpl(index, cutoff);
 
         PriorityQueue<ImplPosting> heapDocId = new PriorityQueue<>(terms.length);
         HashMap<String,PostingsListIterator> listPostings = new HashMap<>();
         HashMap<Integer,Double> mapDocScore = new HashMap<>();
+        vectorDoc = new ArrayList<>();
 
         for(String t: terms){
             PostingsListIterator pl = (PostingsListIterator) index.getPostings(t).iterator();
@@ -36,12 +42,10 @@ public class DocBasedVSMEngine extends AbstractVSMEngine {
         do{
             if(heapDocId.isEmpty()) break;
             ImplPosting head=heapDocId.poll();
-            if(head==null)break;
 
             if(beforeDocId != -1 && beforeDocId!=head.getDocID()){
-
-
-
+                ranking.add(beforeDocId,mapDocScore.get(beforeDocId)/index.getDocNorm(beforeDocId));
+                mapDocScore.remove(beforeDocId);
             }
             beforeDocId = head.getDocID();
             if(!mapDocScore.containsKey(head.getDocID())){
@@ -57,18 +61,7 @@ public class DocBasedVSMEngine extends AbstractVSMEngine {
             }
         }while(!listPostings.isEmpty());
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return ranking;
     }
+
 }

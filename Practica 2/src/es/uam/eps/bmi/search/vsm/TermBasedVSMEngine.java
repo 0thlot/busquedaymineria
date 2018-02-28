@@ -20,7 +20,7 @@ public class TermBasedVSMEngine extends AbstractVSMEngine{
         int numeroDocumentos = index.numDocs();
         RankingImpl ranking = new RankingImpl(index, cutoff);
         String[] palabras = parse(query);
-
+/*
         for (String pa : palabras) {
             PostingsList pList = index.getPostings(pa); // Recorremos la lista de posting de cada palabra
             while (pList.iterator().hasNext()) {
@@ -35,9 +35,9 @@ public class TermBasedVSMEngine extends AbstractVSMEngine{
                 }
             }
         }
-        //Preparar ranking
-        ranking.prepare();
         return ranking;
+        */
+        return null;
     }
 
 }
