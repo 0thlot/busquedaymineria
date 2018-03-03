@@ -5,9 +5,7 @@ import es.uam.eps.bmi.search.index.structure.PostingsList;
 import es.uam.eps.bmi.search.ranking.SearchRanking;
 import es.uam.eps.bmi.search.ranking.impl.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class TermBasedVSMEngine extends AbstractVSMEngine{
 
@@ -19,25 +17,28 @@ public class TermBasedVSMEngine extends AbstractVSMEngine{
     public SearchRanking search(String query, int cutoff) throws IOException {
         int numeroDocumentos = index.numDocs();
         RankingImpl ranking = new RankingImpl(index, cutoff);
+        PriorityQueue<RankingImplDoc> docQueue = new PriorityQueue<>(cutoff);
+        HashMap<Integer, Double> hashMapDocs = new HashMap<>(); //Asocia documento y puntuacion
         String[] palabras = parse(query);
-/*
+
         for (String pa : palabras) {
             PostingsList pList = index.getPostings(pa); // Recorremos la lista de posting de cada palabra
+
             while (pList.iterator().hasNext()) {
                 Posting post = pList.iterator().next();
                 double puntuacion = tfidf(index.getTotalFreq(pa), post.getFreq(), numeroDocumentos);
-                int posDoc = ranking.isDocInRanking(post.getDocID());
-
-                if (posDoc >= 0) { // El documento ya esta creado, añadimos la puntuacion
-                    ranking.addWordDoc(posDoc, puntuacion);
-                } else {  // Creamos el documento y lo añadimos a la lista
-                    ranking.add(post.getDocID(), puntuacion, index.getDocPath(post.getDocID()));
+                if(!hashMapDocs.containsKey(post.getDocID())){
+                    hashMapDocs.put(post.getDocID(), (double) 0);
                 }
+                hashMapDocs.replace(post.getDocID(),hashMapDocs.get(post.getDocID())+puntuacion);
+
             }
         }
+
+        for (Integer docID: hashMapDocs.keySet()) {
+            ranking.add(docID,hashMapDocs.get(docID)/index.getDocNorm(docID));
+        }
         return ranking;
-        */
-        return null;
     }
 
 }
