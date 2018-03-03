@@ -2,12 +2,9 @@ package es.uam.eps.bmi.search.index;
 
 import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.vsm.AbstractVSMEngine;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.net.URL;
+import org.jsoup.Jsoup;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -17,7 +14,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import org.jsoup.Jsoup;
 
 /**
  *
@@ -64,7 +60,7 @@ public abstract class AbstractIndexBuilder implements IndexBuilder {
     }
     
     protected void indexHTML(String url) throws IOException {
-        indexText(Jsoup.parse(new URL(url), 10000).text(), url); // 10 seconds timeout
+        indexText(Jsoup.connect(url).validateTLSCertificates(false).get().text(), url); // 10 seconds timeout
     }
 
      protected void indexHTML(String content, String path) throws IOException {
