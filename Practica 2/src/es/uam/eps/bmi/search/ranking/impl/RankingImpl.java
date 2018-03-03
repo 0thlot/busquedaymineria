@@ -13,14 +13,14 @@ import java.util.*;
  */
 public class RankingImpl implements SearchRanking {
 
-    Index index;
-    PriorityQueue<SearchRankingDoc> ranking;
-    int cutoff;
+    private Index index;
+    private PriorityQueue<SearchRankingDoc> ranking;
+    private int cutoff;
 
     public RankingImpl(Index index, int cutoff){
         this.index = index;
-        ranking = new PriorityQueue<>(Math.min(cutoff,index.numDocs()));
-        this.cutoff = cutoff;
+        this.cutoff = Math.min(cutoff, index.numDocs());
+        ranking = new PriorityQueue<>(this.cutoff, Comparator.reverseOrder());
     }
 
     @Override
@@ -28,9 +28,10 @@ public class RankingImpl implements SearchRanking {
 
     @Override
     public Iterator<SearchRankingDoc> iterator() {
-        SearchRankingDoc[] aux = (SearchRankingDoc[]) ranking.toArray();
+        SearchRankingDoc[] aux = ranking.toArray(new SearchRankingDoc[0]);
         List<SearchRankingDoc> auxL =Arrays.asList(aux);
         auxL.sort(SearchRankingDoc::compareTo);
+
         return auxL.iterator();
 
     }
@@ -51,12 +52,14 @@ public class RankingImpl implements SearchRanking {
      */
     public void add(int docId, double score, String path){
         RankingImplDoc newR=new RankingImplDoc(docId, score, path);
-        if(!ranking.offer(newR)){
+        if (ranking.size() >= this.cutoff) {
             RankingImplDoc aux = (RankingImplDoc) ranking.peek();
             if(aux.getScore()<score){
                 ranking.remove(aux);
                 ranking.offer(newR);
             }
+        } else {
+            ranking.offer(newR);
         }
     }
 
