@@ -50,7 +50,7 @@ public class SerializedRAMIndex extends AbstractIndex {
     public long getTotalFreq(String term) throws IOException {
         long freq=0;
 
-        for (Iterator<Posting> it = diccionario.get(term).iterator(); it.hasNext(); ) { freq += it.next().getFreq(); }
+        for (Iterator<Posting> it = diccionario.get(term).iterator(); it.hasNext(); )  freq += it.next().getFreq();
 
         return freq;
     }

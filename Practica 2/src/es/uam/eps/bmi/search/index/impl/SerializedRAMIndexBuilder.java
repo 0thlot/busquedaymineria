@@ -55,9 +55,12 @@ public class SerializedRAMIndexBuilder extends AbstractIndexBuilder implements S
         documents = new ArrayList<>();
 
         File f = new File(collectionPath);
-        if (f.isDirectory()) indexFolder(f);                // A directory containing text files.
-        else if (f.getName().endsWith(".zip")) indexZip(f); // A zip file containing compressed text files.
-        else indexURLs(f);                                  // A file containing a list of URLs.
+        if (f.exists()) {
+            if (f.isDirectory()) indexFolder(f);                // A directory containing text files.
+            else if (f.getName().endsWith(".zip")) indexZip(f); // A zip file containing compressed text files.
+            else indexURLs(f);                                  // A file containing a list of URLs.
+        }else
+            System.out.println("El path no vale: "+collectionPath);
 
         serialize(indexPath);
         saveDocNorms(indexPath);

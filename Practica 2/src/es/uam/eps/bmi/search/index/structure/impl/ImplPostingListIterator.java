@@ -3,10 +3,11 @@ package es.uam.eps.bmi.search.index.structure.impl;
 import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.index.structure.PostingsListIterator;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImplPostingListIterator implements PostingsListIterator {
+public class ImplPostingListIterator implements PostingsListIterator, Serializable {
     protected List<ImplPosting> postings;
 
     public ImplPostingListIterator(){

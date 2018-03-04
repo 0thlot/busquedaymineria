@@ -2,7 +2,9 @@ package es.uam.eps.bmi.search.index.structure.impl;
 
 import es.uam.eps.bmi.search.index.structure.Posting;
 
-public class ImplPosting extends Posting {
+import java.io.Serializable;
+
+public class ImplPosting extends Posting implements Serializable {
 
     private String term;
 

@@ -1,6 +1,8 @@
 package es.uam.eps.bmi.search.index.impl;
 
-public class ImplDoc {
+import java.io.Serializable;
+
+public class ImplDoc implements Serializable {
 
     private String content;
     private String path;

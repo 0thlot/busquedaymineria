@@ -4,11 +4,12 @@ import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.index.structure.PostingsList;
 import org.apache.lucene.index.PostingsEnum;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ImplPostingList implements PostingsList {
+public class ImplPostingList implements PostingsList, Serializable {
 
     private ImplPostingListIterator iterator;
     private String term;
