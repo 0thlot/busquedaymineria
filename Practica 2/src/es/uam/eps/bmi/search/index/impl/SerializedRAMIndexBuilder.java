@@ -3,7 +3,7 @@ package es.uam.eps.bmi.search.index.impl;
 import es.uam.eps.bmi.search.index.AbstractIndexBuilder;
 import es.uam.eps.bmi.search.index.Config;
 import es.uam.eps.bmi.search.index.Index;
-import es.uam.eps.bmi.search.index.structure.impl.ImplPosting;
+import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.index.structure.impl.ImplPostingList;
 
 import java.io.*;
@@ -31,8 +31,8 @@ public class SerializedRAMIndexBuilder extends AbstractIndexBuilder implements S
         //Generar un nuevo 'documento'
         ImplDoc doc = new ImplDoc(text,path);
         documents.add(doc);
-        //Recorremos el documento para crear la lista de postings.
-        for (String term: text.toLowerCase().split(" ").clone()){
+        //Recorremos el documento para crear la lista de postings
+        for (String term: text.toLowerCase().split(" ")){
             addTerm(term);
         }
         numDocs++;
@@ -80,7 +80,7 @@ public class SerializedRAMIndexBuilder extends AbstractIndexBuilder implements S
     }
 
     private void addTerm(String term){
-        ImplPosting posting = new ImplPosting(numDocs,1, term);
+        Posting posting = new Posting(numDocs,1);
         //El termino se encuentra en el diccionario
         if (diccionario.containsKey(term)){
             //El documento ya esta en la lista de postings del termino

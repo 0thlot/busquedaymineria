@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImplPostingListIterator implements PostingsListIterator, Serializable {
-    protected List<ImplPosting> postings;
+    protected List<Posting> postings;
 
     public ImplPostingListIterator(){
         this.postings = new ArrayList<>();
     }
 
-    public void add(ImplPosting posting) {
+    public void add(Posting posting) {
         postings.add(posting);
     }
 
@@ -30,9 +30,5 @@ public class ImplPostingListIterator implements PostingsListIterator, Serializab
 
     public boolean contains(Posting post){ return postings.contains(post); }
 
-    public ImplPosting get(Posting posting){
-        for(ImplPosting postingAux: postings)
-            if (postingAux.compareTo(posting)==0) return postingAux;
-        return null;
-    }
+
 }

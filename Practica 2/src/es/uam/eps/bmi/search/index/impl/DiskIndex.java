@@ -3,10 +3,26 @@ package es.uam.eps.bmi.search.index.impl;
 import es.uam.eps.bmi.search.index.AbstractIndex;
 import es.uam.eps.bmi.search.index.structure.PostingsList;
 
-import java.util.Collection;
+import java.io.RandomAccessFile;
+import java.util.*;
 
 public class DiskIndex extends AbstractIndex {
 
+    private RandomAccessFile postingFile;
+    private List<String> rutas;
+    private Map<String,Integer> listasPosting;
+
+    public DiskIndex(String ruta) {
+        load(ruta);
+    }
+
+    private void load(String ruta){
+
+        this.rutas = new ArrayList<>();
+        this.listasPosting = new HashMap<>();
+
+
+    }
 
     @Override
     public int numDocs() {

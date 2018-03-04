@@ -2,6 +2,8 @@ package es.uam.eps.bmi.search.test;
 
 import es.uam.eps.bmi.search.SearchEngine;
 import es.uam.eps.bmi.search.index.Index;
+import es.uam.eps.bmi.search.index.impl.SerializedRAMIndex;
+import es.uam.eps.bmi.search.index.impl.SerializedRAMIndexBuilder;
 import es.uam.eps.bmi.search.index.lucene.LuceneBuilder;
 import es.uam.eps.bmi.search.index.lucene.LuceneForwardIndex;
 import es.uam.eps.bmi.search.index.lucene.LuceneForwardIndexBuilder;
@@ -13,16 +15,13 @@ import es.uam.eps.bmi.search.ranking.SearchRankingDoc;
 import es.uam.eps.bmi.search.ui.TextResultDocRenderer;
 import es.uam.eps.bmi.search.vsm.DocBasedVSMEngine;
 import es.uam.eps.bmi.search.vsm.SlowVSMEngine;
+import es.uam.eps.bmi.search.vsm.TermBasedVSMEngine;
 
 import java.io.File;
 import java.io.IOException;
 
 //import es.uam.eps.bmi.search.index.impl.DiskIndex;
 //import es.uam.eps.bmi.search.index.impl.DiskIndexBuilder;
-import es.uam.eps.bmi.search.index.impl.SerializedRAMIndex;
-import es.uam.eps.bmi.search.index.impl.SerializedRAMIndexBuilder;
-
-//import es.uam.eps.bmi.search.vsm.TermBasedVSMEngine;
 
 /**
  *
@@ -39,8 +38,8 @@ public class TestEngine {
         String baseIndexPath = "index/urls";
 
         // Construcción
-        //new LuceneForwardIndexBuilder().build(collPath, baseIndexPath + "/lucene/forward");
-        //new LuceneBuilder().build(collPath, baseIndexPath + "/lucene");
+        new LuceneForwardIndexBuilder().build(collPath, baseIndexPath + "/lucene/forward");
+        new LuceneBuilder().build(collPath, baseIndexPath + "/lucene");
         new SerializedRAMIndexBuilder().build(collPath, baseIndexPath + "/ram");
         /*new DiskIndexBuilder().build(collPath, baseIndexPath + "/disk");
 //        
@@ -54,8 +53,8 @@ public class TestEngine {
         // Inspección
         System.out.println("-----------------------");
         System.out.println("Checking index correction on URL collection");
-        //testIndex(new LuceneForwardIndex(baseIndexPath + "/lucene/forward"), "information");
-        //testIndex(new LuceneIndex(baseIndexPath + "/lucene"), "information");
+        testIndex(new LuceneForwardIndex(baseIndexPath + "/lucene/forward"), "information");
+        testIndex(new LuceneIndex(baseIndexPath + "/lucene"), "information");
         testIndex(new SerializedRAMIndex(baseIndexPath + "/ram"), "information");
         //testIndex(new DiskIndex(baseIndexPath + "/disk"), "information");
 
@@ -74,19 +73,19 @@ public class TestEngine {
         System.out.println("-----------------------");
         System.out.println("Checking engine results on URL collection");
         String query = "information probability";
-        //Index luceneFwdIndex = new LuceneForwardIndex(baseIndexPath + "/lucene/forward");
-        //Index luceneIndex = new LuceneIndex(baseIndexPath + "/lucene");
+        Index luceneFwdIndex = new LuceneForwardIndex(baseIndexPath + "/lucene/forward");
+        Index luceneIndex = new LuceneIndex(baseIndexPath + "/lucene");
         Index ramIndex = new SerializedRAMIndex(baseIndexPath + "/ram");
         //Index diskIndex = new DiskIndex(baseIndexPath + "/disk");
+
+        testSearch(new LuceneEngine(baseIndexPath + "/lucene"), query, 5);
+        testSearch(new SlowVSMEngine(luceneFwdIndex), query, 5);
         
-        //testSearch(new LuceneEngine(baseIndexPath + "/lucene"), query, 5);
-        //testSearch(new SlowVSMEngine(luceneFwdIndex), query, 5);
-        
-        //testSearch(new TermBasedVSMEngine(luceneIndex), query, 5);
-        //testSearch(new TermBasedVSMEngine(ramIndex), query, 5);
+        testSearch(new TermBasedVSMEngine(luceneIndex), query, 5);
+        testSearch(new TermBasedVSMEngine(ramIndex), query, 5);
         //testSearch(new TermBasedVSMEngine(diskIndex), query, 5);
 
-        //testSearch(new DocBasedVSMEngine(luceneIndex), query, 5);
+        testSearch(new DocBasedVSMEngine(luceneIndex), query, 5);
         testSearch(new DocBasedVSMEngine(ramIndex), query, 5);
         //testSearch(new DocBasedVSMEngine(diskIndex), query, 5);
         

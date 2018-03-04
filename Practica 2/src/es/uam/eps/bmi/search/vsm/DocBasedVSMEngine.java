@@ -9,6 +9,7 @@ import es.uam.eps.bmi.search.ranking.impl.RankingImpl;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 public class DocBasedVSMEngine extends AbstractVSMEngine {
@@ -23,15 +24,15 @@ public class DocBasedVSMEngine extends AbstractVSMEngine {
         RankingImpl ranking = new RankingImpl(index, cutoff);
 
         PriorityQueue<ImplPosting> heapDocId = new PriorityQueue<>(terms.length);
-        HashMap<String,PostingsListIterator> listPostings = new HashMap<>();
-        HashMap<Integer,Double> mapDocScore = new HashMap<>();
+        Map<String,PostingsListIterator> listPosting = new HashMap<>();
+        Map<Integer,Double> mapDocScore = new HashMap<>();
 
         for(String t: terms){
             PostingsListIterator pl = (PostingsListIterator) index.getPostings(t).iterator();
             if(pl!=null && pl.hasNext()){
                 Posting p = pl.next();
                 heapDocId.add(new ImplPosting(p.getDocID(),p.getFreq(),t));
-                listPostings.put(t,pl);
+                listPosting.put(t,pl);
             }
         }
         int beforeDocId = heapDocId.peek().getDocID();
@@ -57,13 +58,13 @@ public class DocBasedVSMEngine extends AbstractVSMEngine {
             }
 
             mapDocScore.replace(head.getDocID(),mapDocScore.get(head.getDocID())+tfidf(head.getFreq(),index.getDocFreq(head.getTerm()),index.numDocs()));
-            PostingsListIterator pl = listPostings.get(head.getTerm());
+            PostingsListIterator pl = listPosting.get(head.getTerm());
 
             if(pl!=null && pl.hasNext()){
                 Posting p = pl.next();
                 heapDocId.add(new ImplPosting(p.getDocID(),p.getFreq(),head.getTerm()));
             }else{
-                listPostings.remove(head.getTerm());
+                listPosting.remove(head.getTerm());
             }
 
         }while(true);
