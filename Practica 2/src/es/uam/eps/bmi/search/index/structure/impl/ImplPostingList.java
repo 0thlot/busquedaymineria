@@ -4,22 +4,36 @@ import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.index.structure.PostingsList;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class ImplPostingList implements PostingsList, Serializable {
 
-    private ImplPostingListIterator iterator;
+    private List<Posting> postings;
 
     public ImplPostingList(){
-        iterator = new ImplPostingListIterator();
+        postings = new ArrayList<>();
     }
 
-    public int size(){ return iterator.postings.size(); }
+    public int size(){ return postings.size(); }
 
-    public void add(Posting posting){ iterator.add(posting); }
+    public void add(Posting posting){ postings.add(posting); }
 
-    public boolean contains(Posting post){ return iterator.contains(post); }
+    public boolean contains(Posting post){ return postings.contains(post); }
 
     @Override
-    public Iterator<Posting> iterator() { return iterator; }
+    public Iterator<Posting> iterator() { return postings.iterator(); }
+
+    @Override
+    public String toString() {
+        StringBuilder aux = new StringBuilder();
+
+        for(Posting p:postings){
+            aux.append(p.getDocID()).append(" ").append(p.getFreq()).append(" ");
+        }
+        aux.deleteCharAt(aux.length()-1);
+
+        return aux.toString();
+    }
 }
