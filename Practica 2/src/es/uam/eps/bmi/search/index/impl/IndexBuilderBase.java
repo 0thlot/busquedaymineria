@@ -14,6 +14,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static java.nio.file.StandardOpenOption.APPEND;
+
 public abstract class IndexBuilderBase extends AbstractIndexBuilder{
 
     protected String indexRuta;
@@ -29,11 +31,9 @@ public abstract class IndexBuilderBase extends AbstractIndexBuilder{
         for(String t: terminosSet){
             addTermPosting(t,Collections.frequency(terminos,t));
         }
-        Path ruta = Paths.get(indexRuta+System.lineSeparator()+Config.PATHS_FILE);
-        try (BufferedWriter w = Files.newBufferedWriter(ruta)) {
-            w.write(path);
-            w.newLine();
-        }
+        Path ruta = Paths.get(indexRuta+File.separator+Config.PATHS_FILE);
+        Files.write(ruta,(path+"\n").getBytes(),APPEND);
+
 
         docId++;
     }
@@ -59,7 +59,7 @@ public abstract class IndexBuilderBase extends AbstractIndexBuilder{
             throw new IOException();
         }
 
-        File rutasFile = new File(indexRuta+System.lineSeparator()+ Config.PATHS_FILE);
+        File rutasFile = new File(indexRuta+File.separator+ Config.PATHS_FILE);
         rutasFile.createNewFile();
 
         if(collectioFile.isDirectory()){
@@ -73,7 +73,7 @@ public abstract class IndexBuilderBase extends AbstractIndexBuilder{
         }
 
         this.saveIndex();
-        this.saveDocNorms(indexPath);
+        //this.saveDocNorms(indexPath);
 
     }
 

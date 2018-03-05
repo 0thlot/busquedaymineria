@@ -6,6 +6,7 @@ import es.uam.eps.bmi.search.index.Index;
 
 
 import java.io.*;
+import java.nio.file.FileSystem;
 
 
 public class DiskIndexBuilder extends IndexBuilderBase {
@@ -24,14 +25,14 @@ public class DiskIndexBuilder extends IndexBuilderBase {
     protected void saveIndex() throws IOException {
 
         try(
-                OutputStream dicF = new FileOutputStream(indexRuta+System.lineSeparator() + Config.DICTIONARY_FILE);
-                OutputStream dicP = new FileOutputStream(indexRuta+System.lineSeparator() + Config.POSTINGS_FILE);
+                OutputStream dicF = new FileOutputStream(indexRuta+ File.separator + Config.DICTIONARY_FILE);
+                OutputStream dicP = new FileOutputStream(indexRuta+File.separator + Config.POSTINGS_FILE);
         ){
             final int[] offset = {0};
             postingMap.forEach((k,v)->{
                 try {
                     dicF.write((k+" "+ offset[0] +"\n").getBytes());
-                    String auxListP = v.size() +" "+v;
+                    String auxListP = v.size() +" "+v+" ";
                     offset[0] += auxListP.length();
                     dicP.write((auxListP).getBytes());
                 } catch (IOException e) {
