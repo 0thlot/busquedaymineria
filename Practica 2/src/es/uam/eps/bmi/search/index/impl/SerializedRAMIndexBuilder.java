@@ -85,12 +85,12 @@ public class SerializedRAMIndexBuilder extends AbstractIndexBuilder implements S
         if (diccionario.containsKey(term)){
             //El documento ya esta en la lista de postings del termino
             if (diccionario.get(term).contains(posting)){
-                diccionario.get(term).get(posting).add1();
+               // diccionario.get(term).get(posting).add1();
             }else {
                 diccionario.get(term).add(posting);
             }
         }else{
-            ImplPostingList postingsList = new ImplPostingList(term);
+            ImplPostingList postingsList = new ImplPostingList();
             postingsList.add(posting);
             diccionario.put(term, postingsList);
         }

@@ -2,11 +2,9 @@ package es.uam.eps.bmi.search.index.impl;
 
 import es.uam.eps.bmi.search.index.AbstractIndexBuilder;
 import es.uam.eps.bmi.search.index.Config;
-import es.uam.eps.bmi.search.index.Index;
 import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.index.structure.impl.ImplPostingList;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,11 +23,12 @@ public abstract class IndexBuilderBase extends AbstractIndexBuilder{
     @Override
     protected void indexText(String text, String path) throws IOException {
 
-        List<String> terminos = Arrays.asList(text.replaceAll("[^A-Za-z0-9 ]", " ").toLowerCase().split(" "));
+        List<String> terminos = Arrays.asList(text.replaceAll("[^A-Za-z0-9\\- ]", "").toLowerCase().trim().split(" "));
         Set<String> terminosSet = new HashSet<>(terminos);
 
         for(String t: terminosSet){
-            addTermPosting(t,Collections.frequency(terminos,t));
+            if(!t.equals("") && !t.equals("-"))
+                addTermPosting(t,Collections.frequency(terminos,t));
         }
         Path ruta = Paths.get(indexRuta+File.separator+Config.PATHS_FILE);
         Files.write(ruta,(path+"\n").getBytes(),APPEND);
@@ -73,7 +72,7 @@ public abstract class IndexBuilderBase extends AbstractIndexBuilder{
         }
 
         this.saveIndex();
-        //this.saveDocNorms(indexPath);
+        this.saveDocNorms(indexPath);
 
     }
 

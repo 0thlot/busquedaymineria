@@ -36,4 +36,13 @@ public class ImplPostingList implements PostingsList, Serializable {
 
         return aux.toString();
     }
+
+    public static PostingsList toList(String postingList) {
+        ImplPostingList aux = new ImplPostingList();
+        String[] postings = postingList.split(" ");
+        for(int i = 0;i<postings.length;i+=2){
+            aux.add(new Posting(Integer.parseInt(postings[i]),Long.parseLong(postings[i+1])));
+        }
+        return aux;
+    }
 }

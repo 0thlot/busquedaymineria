@@ -2,26 +2,17 @@ package es.uam.eps.bmi.search.test;
 
 import es.uam.eps.bmi.search.SearchEngine;
 import es.uam.eps.bmi.search.index.Index;
-import es.uam.eps.bmi.search.index.impl.SerializedRAMIndex;
-import es.uam.eps.bmi.search.index.impl.SerializedRAMIndexBuilder;
-import es.uam.eps.bmi.search.index.lucene.LuceneBuilder;
-import es.uam.eps.bmi.search.index.lucene.LuceneForwardIndex;
-import es.uam.eps.bmi.search.index.lucene.LuceneForwardIndexBuilder;
-import es.uam.eps.bmi.search.index.lucene.LuceneIndex;
+import es.uam.eps.bmi.search.index.NoIndexException;
+import es.uam.eps.bmi.search.index.impl.DiskIndex;
+import es.uam.eps.bmi.search.index.impl.DiskIndexBuilder;
 import es.uam.eps.bmi.search.index.structure.Posting;
-import es.uam.eps.bmi.search.lucene.LuceneEngine;
 import es.uam.eps.bmi.search.ranking.SearchRanking;
 import es.uam.eps.bmi.search.ranking.SearchRankingDoc;
 import es.uam.eps.bmi.search.ui.TextResultDocRenderer;
 import es.uam.eps.bmi.search.vsm.DocBasedVSMEngine;
-import es.uam.eps.bmi.search.vsm.SlowVSMEngine;
-import es.uam.eps.bmi.search.vsm.TermBasedVSMEngine;
 
 import java.io.File;
 import java.io.IOException;
-
-//import es.uam.eps.bmi.search.index.impl.DiskIndex;
-//import es.uam.eps.bmi.search.index.impl.DiskIndexBuilder;
 
 /**
  *
@@ -38,25 +29,25 @@ public class TestEngine {
         String baseIndexPath = "index/urls";
 
         // Construcción
-        new LuceneForwardIndexBuilder().build(collPath, baseIndexPath + "/lucene/forward");
-        new LuceneBuilder().build(collPath, baseIndexPath + "/lucene");
-        new SerializedRAMIndexBuilder().build(collPath, baseIndexPath + "/ram");
-        /*new DiskIndexBuilder().build(collPath, baseIndexPath + "/disk");
-//        
+        //new LuceneForwardIndexBuilder().build(collPath, baseIndexPath + "/lucene/forward");
+        //new LuceneBuilder().build(collPath, baseIndexPath + "/lucene");
+        //new SerializedRAMIndexBuilder().build(collPath, baseIndexPath + "/ram");
+        new DiskIndexBuilder().build(collPath, baseIndexPath + "/disk");
+
 //        // Excepción
         try {
             new DiskIndex("");
         } catch (NoIndexException ex) {
             System.out.println("No index in " + ex.getFolder());
         }
-        */
+
         // Inspección
         System.out.println("-----------------------");
         System.out.println("Checking index correction on URL collection");
-        testIndex(new LuceneForwardIndex(baseIndexPath + "/lucene/forward"), "information");
-        testIndex(new LuceneIndex(baseIndexPath + "/lucene"), "information");
-        testIndex(new SerializedRAMIndex(baseIndexPath + "/ram"), "information");
-        //testIndex(new DiskIndex(baseIndexPath + "/disk"), "information");
+        //testIndex(new LuceneForwardIndex(baseIndexPath + "/lucene/forward"), "information");
+        //testIndex(new LuceneIndex(baseIndexPath + "/lucene"), "information");
+        //testIndex(new SerializedRAMIndex(baseIndexPath + "/ram"), "information");
+        testIndex(new DiskIndex(baseIndexPath + "/disk"), "information");
 
         /////////////////////////////////////
         // Índices: pruebas de rendimiento //
@@ -65,19 +56,20 @@ public class TestEngine {
        /* testIndexPerformance("1k", "collections/docs1k.zip", "index/1k");
         testIndexPerformance("10k", "collections/docs10k.zip", "index/10k");
         testIndexPerformance("100k", "collections/docs100k.zip", "index/100k");
-        */
+
         /////////////////////////////////////
         // Búsqueda: pruebas de corrección //
         /////////////////////////////////////
 
         System.out.println("-----------------------");
-        System.out.println("Checking engine results on URL collection");
+        System.out.println("Checking engine results on URL collection");*/
         String query = "information probability";
-        Index luceneFwdIndex = new LuceneForwardIndex(baseIndexPath + "/lucene/forward");
+        /*Index luceneFwdIndex = new LuceneForwardIndex(baseIndexPath + "/lucene/forward");
         Index luceneIndex = new LuceneIndex(baseIndexPath + "/lucene");
         Index ramIndex = new SerializedRAMIndex(baseIndexPath + "/ram");
-        //Index diskIndex = new DiskIndex(baseIndexPath + "/disk");
-
+        */
+        Index diskIndex = new DiskIndex(baseIndexPath + "/disk");
+/*
         testSearch(new LuceneEngine(baseIndexPath + "/lucene"), query, 5);
         testSearch(new SlowVSMEngine(luceneFwdIndex), query, 5);
         
@@ -87,8 +79,9 @@ public class TestEngine {
 
         testSearch(new DocBasedVSMEngine(luceneIndex), query, 5);
         testSearch(new DocBasedVSMEngine(ramIndex), query, 5);
-        //testSearch(new DocBasedVSMEngine(diskIndex), query, 5);
-        
+        */
+        testSearch(new DocBasedVSMEngine(diskIndex), query, 5);
+
         //////////////////////////////////////
         // Búsqueda: pruebas de rendimiento //
         //////////////////////////////////////

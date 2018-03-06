@@ -1,56 +1,48 @@
 package es.uam.eps.bmi.search.index.impl;
 
-import es.uam.eps.bmi.search.index.AbstractIndex;
+import es.uam.eps.bmi.search.index.Config;
+import es.uam.eps.bmi.search.index.NoIndexException;
 import es.uam.eps.bmi.search.index.structure.PostingsList;
+import es.uam.eps.bmi.search.index.structure.impl.ImplPostingList;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
-public class DiskIndex extends AbstractIndex {
+public class DiskIndex extends IndexBase<Integer> {
 
-    private RandomAccessFile postingFile;
-    private List<String> rutas;
-    private Map<String,Integer> listasPosting;
+    private String ruta;
 
-    public DiskIndex(String ruta) {
+    public DiskIndex(String ruta) throws IOException {
+        if(ruta==null || ruta.equals(""))
+            throw new NoIndexException("Ruta esta vacia");
+        this.ruta = ruta;
         load(ruta);
     }
 
-    private void load(String ruta){
-
-        this.rutas = new ArrayList<>();
-        this.listasPosting = new HashMap<>();
 
 
+    @Override
+    public PostingsList getPostings(String term) throws IOException {
+
+        try(RandomAccessFile postingFile = new RandomAccessFile(ruta + File.separator + Config.POSTINGS_FILE,"r")) {
+            postingFile.seek( this.listasPosting.get(term));
+            return ImplPostingList.toList(postingFile.readLine());
+        }
     }
 
     @Override
-    public int numDocs() {
-        return 0;
-    }
+    public void loadIndex(String ruta) throws IOException {
 
-    @Override
-    public PostingsList getPostings(String term) {
-        return null;
-    }
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(ruta + File.separator + Config.DICTIONARY_FILE))) {
+            br.lines().forEach(s->{
+                String[] aux = s.split(" ");
+               this.listasPosting.put(aux[0],Integer.parseInt(aux[1]));
+            });
+        }
 
-    @Override
-    public Collection<String> getAllTerms() {
-        return null;
-    }
-
-    @Override
-    public long getTotalFreq(String term) {
-        return 0;
-    }
-
-    @Override
-    public long getDocFreq(String term) {
-        return 0;
-    }
-
-    @Override
-    public String getDocPath(int docID) {
-        return null;
     }
 }
