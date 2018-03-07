@@ -56,11 +56,14 @@ public abstract class IndexBase<V> extends AbstractIndex{
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(ruta + File.separator + Config.PATHS_FILE))) {
             this.rutas = new String[(int)br.lines().parallel().count()];
+        }
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(ruta + File.separator + Config.PATHS_FILE))) {
             final int[] c = {0};
-            br.lines().forEach(s->{
+            br.lines().forEach(s -> {
                 this.rutas[c[0]++] = s;
             });
         }
+
         this.loadIndex(ruta);
         this.loadNorms(ruta);
 

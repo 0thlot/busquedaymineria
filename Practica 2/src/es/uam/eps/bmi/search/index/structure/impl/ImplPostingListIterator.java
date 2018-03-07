@@ -8,27 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImplPostingListIterator implements PostingsListIterator, Serializable {
-    protected List<Posting> postings;
+    private Posting[] postings;
+    private int i=0;
 
-    public ImplPostingListIterator(){
-        this.postings = new ArrayList<>();
-    }
+    public ImplPostingListIterator(List<Posting> aux){
 
-    public void add(Posting posting) {
-        postings.add(posting);
+        this.postings = aux.toArray(new Posting[0]);
     }
 
     @Override
     public boolean hasNext() {
-        return postings.iterator().hasNext();
+        return i<postings.length;
     }
 
     @Override
     public Posting next() {
-        return postings.iterator().next();
+        i++;
+        return postings[i-1];
     }
-
-    public boolean contains(Posting post){ return postings.contains(post); }
 
 
 }

@@ -2,6 +2,7 @@ package es.uam.eps.bmi.search.index.structure.impl;
 
 import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.index.structure.PostingsList;
+import es.uam.eps.bmi.search.index.structure.PostingsListIterator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 public class ImplPostingList implements PostingsList, Serializable {
 
     private List<Posting> postings;
+    private Iterator<Posting> iterator;
 
     public ImplPostingList(){
         postings = new ArrayList<>();
@@ -23,7 +25,10 @@ public class ImplPostingList implements PostingsList, Serializable {
     public boolean contains(Posting post){ return postings.contains(post); }
 
     @Override
-    public Iterator<Posting> iterator() { return postings.iterator(); }
+    public Iterator<Posting> iterator() {
+
+        return new ImplPostingListIterator(postings);
+    }
 
     @Override
     public String toString() {
@@ -45,4 +50,5 @@ public class ImplPostingList implements PostingsList, Serializable {
         }
         return aux;
     }
+
 }
