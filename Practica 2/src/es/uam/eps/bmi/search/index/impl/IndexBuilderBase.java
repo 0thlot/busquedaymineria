@@ -17,13 +17,13 @@ import static java.nio.file.StandardOpenOption.APPEND;
 public abstract class IndexBuilderBase extends AbstractIndexBuilder{
 
     protected String indexRuta;
-    private int docId=0;
-    protected Map<String,ImplPostingList> postingMap = postingMap = new TreeMap<>();;
+    protected int docId=0;
+    protected Map<String,ImplPostingList> postingMap = new TreeMap<>();
 
     @Override
     protected void indexText(String text, String path) throws IOException {
 
-        List<String> terminos = Arrays.asList(text.replaceAll("[^A-Za-z0-9 ]", " ").toLowerCase().trim().split(" "));
+        List<String> terminos = Arrays.asList(text.toLowerCase().split("\\P{Alpha}+"));
         Set<String> terminosSet = new HashSet<>(terminos);
 
         for(String t: terminosSet){
