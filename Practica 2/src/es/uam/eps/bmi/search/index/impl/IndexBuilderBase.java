@@ -23,7 +23,7 @@ public abstract class IndexBuilderBase extends AbstractIndexBuilder{
     @Override
     protected void indexText(String text, String path) throws IOException {
 
-        List<String> terminos = Arrays.asList(text.replaceAll("[^A-Za-z0-9\\- ]", "").toLowerCase().trim().split(" "));
+        List<String> terminos = Arrays.asList(text.replaceAll("[^A-Za-z0-9 ]", " ").toLowerCase().trim().split(" "));
         Set<String> terminosSet = new HashSet<>(terminos);
 
         for(String t: terminosSet){
