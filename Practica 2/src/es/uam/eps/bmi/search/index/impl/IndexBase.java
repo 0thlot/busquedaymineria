@@ -46,8 +46,7 @@ public abstract class IndexBase<V> extends AbstractIndex{
 
     @Override
     public long getDocFreq(String term)  throws IOException  {
-        PostingsList list = getPostings(term);
-        return list.size();
+        return getPostings(term).size();
     }
 
     protected void load(String ruta) throws IOException {
@@ -58,10 +57,13 @@ public abstract class IndexBase<V> extends AbstractIndex{
             this.rutas = new String[(int)br.lines().parallel().count()];
         }
         try (BufferedReader br = Files.newBufferedReader(Paths.get(ruta + File.separator + Config.PATHS_FILE))) {
-            final int[] c = {0};
-            br.lines().forEach(s -> {
-                this.rutas[c[0]++] = s;
-            });
+
+            String s;
+            int c = 0;
+            while ((s=br.readLine())!=null){
+                this.rutas[c++] = s;
+            }
+
         }
 
         this.loadIndex(ruta);

@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 
 public class DiskIndexBuilder extends IndexBuilderBase {
@@ -30,19 +31,14 @@ public class DiskIndexBuilder extends IndexBuilderBase {
                 OutputStream dicF = new FileOutputStream(indexRuta+ File.separator + Config.DICTIONARY_FILE);
                 OutputStream dicP = new FileOutputStream(indexRuta+File.separator + Config.POSTINGS_FILE);
         ){
-            final int[] offset = {0};
-            postingMap.forEach((String k, ImplPostingList v) ->{
-                try {
-                    dicF.write(String.format("%s %d\n", k, offset[0]).getBytes());
-                    String auxListP =v+"\n";
-                    // +1 para el \n
-                    offset[0] += auxListP.length();
-                    dicP.write(auxListP.getBytes());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-            });
+            int offset = 0;
+            String auxListP;
+            for(Map.Entry entry:postingMap.entrySet()){
+                dicF.write(String.format("%s %d\n", entry.getKey(), offset).getBytes());
+                auxListP =entry.getValue()+"\n";
+                offset += auxListP.length();
+                dicP.write(auxListP.getBytes());
+            }
         }
 
 

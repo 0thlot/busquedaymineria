@@ -14,12 +14,11 @@ import java.nio.file.Paths;
 
 public class DiskIndex extends IndexBase<Integer> {
 
-    private String ruta;
+    private RandomAccessFile postingFile;
 
     public DiskIndex(String ruta) throws IOException {
         if(ruta==null || ruta.equals(""))
             throw new NoIndexException("Ruta esta vacia");
-        this.ruta = ruta;
         load(ruta);
     }
 
@@ -28,21 +27,24 @@ public class DiskIndex extends IndexBase<Integer> {
     @Override
     public PostingsList getPostings(String term) throws IOException {
 
-        try(RandomAccessFile postingFile = new RandomAccessFile(ruta + File.separator + Config.POSTINGS_FILE,"r")) {
-            postingFile.seek( this.listasPosting.get(term));
-            return ImplPostingList.toList(postingFile.readLine());
-        }
+        postingFile.seek( this.listasPosting.get(term));
+        return ImplPostingList.toList(postingFile.readLine());
+
     }
 
     @Override
     public void loadIndex(String ruta) throws IOException {
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(ruta + File.separator + Config.DICTIONARY_FILE))) {
-            br.lines().forEach(s->{
-                String[] aux = s.split(" ");
-               this.listasPosting.put(aux[0],Integer.parseInt(aux[1]));
-            });
+            String[] aux;
+            String s;
+            while ((s=br.readLine())!=null){
+                aux = s.split(" ");
+                this.listasPosting.put(aux[0],Integer.parseInt(aux[1]));
+            }
         }
+
+        postingFile = new RandomAccessFile(ruta + File.separator + Config.POSTINGS_FILE,"r");
 
     }
 }

@@ -21,16 +21,11 @@ public class SerializedRAMIndexBuilder extends IndexBuilderBase implements Seria
         return new SerializedRAMIndex(indexRuta);
     }
 
-    protected void saveIndex(){
-        try{
-            FileOutputStream fileOut = new FileOutputStream(indexRuta+File.separator+Config.INDEX_FILE);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+    @Override
+    protected void saveIndex() throws IOException{
+        try( ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(indexRuta+File.separator+Config.INDEX_FILE));
+        ){
             out.writeObject(postingMap); //Guardamos las listas de postings
-            out.close();
-            fileOut.close();
-        }
-        catch (IOException e){
-            e.printStackTrace();
         }
     }
 }
