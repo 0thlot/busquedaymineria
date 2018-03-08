@@ -43,7 +43,7 @@ public abstract class IndexBuilderBase extends AbstractIndexBuilder{
             postingMap.put(t,new ImplPostingList());
         }
 
-        postingMap.get(t).add(new Posting(docId,frequency));
+        postingMap.get(t).add(new Posting(docId,frequency)) ;
 
 
     }
