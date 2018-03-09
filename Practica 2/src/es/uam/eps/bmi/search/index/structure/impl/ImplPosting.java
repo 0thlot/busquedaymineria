@@ -6,14 +6,14 @@ import java.io.Serializable;
 
 public class ImplPosting extends Posting implements Serializable {
 
-    private String term;
+    private int pos;
 
-    public ImplPosting(int id, long f, String t) {
+    public ImplPosting(int id, long f, int pos) {
         super(id, f);
-        term = t;
+        pos = pos;
     }
 
-    public String getTerm() {
-        return term;
+    public int getPos() {
+        return pos;
     }
 }

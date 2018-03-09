@@ -1,12 +1,13 @@
 package es.uam.eps.bmi.search.vsm;
+
 import es.uam.eps.bmi.search.index.Index;
 import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.index.structure.PostingsList;
-import es.uam.eps.bmi.search.index.structure.PostingsListIterator;
 import es.uam.eps.bmi.search.ranking.SearchRanking;
-import es.uam.eps.bmi.search.ranking.impl.*;
+import es.uam.eps.bmi.search.ranking.impl.RankingImpl;
+
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
 
 public class TermBasedVSMEngine extends AbstractVSMEngine{
 
@@ -23,10 +24,10 @@ public class TermBasedVSMEngine extends AbstractVSMEngine{
 
         for (String pa : palabras) {
             PostingsList pList = index.getPostings(pa); // Recorremos la lista de posting de cada palabra
-
+            long docFreq = index.getDocFreq(pa);
             for(Posting post: pList) {
                 //Posting post = pList.iterator().next();
-                double puntuacion = tfidf(post.getFreq(), index.getDocFreq(pa), numeroDocumentos);
+                double puntuacion = tfidf(post.getFreq(), docFreq, numeroDocumentos);
                 if(!hashMapDocs.containsKey(post.getDocID())){
                     hashMapDocs.put(post.getDocID(), (double) 0);
                 }

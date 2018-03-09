@@ -29,3 +29,4 @@ hs_err_pid*
 !/lib/jsoup-1.11.2.jar
 !/lib/pdfbox-app-2.0.8.jar
 
+/index/*

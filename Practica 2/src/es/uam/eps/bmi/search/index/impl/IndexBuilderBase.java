@@ -6,19 +6,17 @@ import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.index.structure.impl.ImplPostingList;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.OutputStream;
 import java.util.*;
-
-import static java.nio.file.StandardOpenOption.APPEND;
 
 public abstract class IndexBuilderBase extends AbstractIndexBuilder{
 
     protected String indexRuta;
     protected int docId=0;
     protected Map<String,ImplPostingList> postingMap = new TreeMap<>();
+    private OutputStream outRutas;
 
     @Override
     protected void indexText(String text, String path) throws IOException {
@@ -30,9 +28,7 @@ public abstract class IndexBuilderBase extends AbstractIndexBuilder{
             if(!t.equals("") && !t.equals("-"))
                 addTermPosting(t,Collections.frequency(terminos,t));
         }
-        Path ruta = Paths.get(indexRuta+File.separator+Config.PATHS_FILE);
-        Files.write(ruta,(path+"\n").getBytes(),APPEND);
-
+        outRutas.write((path+"\n").getBytes());
 
         docId++;
     }
@@ -57,19 +53,17 @@ public abstract class IndexBuilderBase extends AbstractIndexBuilder{
         if (!collectioFile.exists()) {
             throw new IOException();
         }
-
-        File rutasFile = new File(indexRuta+File.separator+ Config.PATHS_FILE);
-        rutasFile.createNewFile();
-
-        if(collectioFile.isDirectory()){
-            this.indexFolder(collectioFile);
-        }else if(collectioFile.getName().endsWith(".zip")){
-            this.indexZip(collectioFile);
-        }else if(collectioFile.getName().endsWith(".txt")){
-            this.indexURLs(collectioFile);
-        }else {
-            throw new IOException("Ruta de la coleccion no valida");
+        outRutas = new FileOutputStream(indexRuta+File.separator+ Config.PATHS_FILE);
+        if (collectioFile.isDirectory()) {
+           this.indexFolder(collectioFile);
+        } else if (collectioFile.getName().endsWith(".zip")) {
+           this.indexZip(collectioFile);
+        } else if (collectioFile.getName().endsWith(".txt")) {
+           this.indexURLs(collectioFile);
+        } else {
+           throw new IOException("Ruta de la coleccion no valida");
         }
+        outRutas.close();
 
         this.saveIndex();
         this.saveDocNorms(indexPath);

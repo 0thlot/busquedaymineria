@@ -63,8 +63,8 @@ public class TestEngine {
         // Índices: pruebas de rendimiento //
         /////////////////////////////////////
         
-        testIndexPerformance("1k", "collections/docs1k.zip", "index/1k");
-        testIndexPerformance("10k", "collections/docs10k.zip", "index/10k");
+        //testIndexPerformance("1k", "collections/docs1k.zip", "index/1k");
+        //testIndexPerformance("10k", "collections/docs10k.zip", "index/10k");
         //testIndexPerformance("100k", "collections/docs100k.zip", "index/100k");
 
         /////////////////////////////////////
@@ -122,7 +122,7 @@ public class TestEngine {
         new SerializedRAMIndexBuilder().build(collPath, baseIndexPath + "/ram");
         Timer.time("\tRAMIndex:\t");
         new DiskIndexBuilder().build(collPath, baseIndexPath + "/disk");
-        Timer.time("\tDiskIndex:\t");        
+        Timer.time("\tDiskIndex:\t");
 
         Timer.reset("  Load time...");
         new LuceneForwardIndex(baseIndexPath + "/lucene/forward");
@@ -132,7 +132,7 @@ public class TestEngine {
         new SerializedRAMIndex(baseIndexPath + "/ram");
         Timer.time("\tRAMIndex:\t");
         new DiskIndex(baseIndexPath + "/disk");
-        Timer.time("\tDiskIndex:\t");        
+        Timer.time("\tDiskIndex:\t");
 
         System.out.println("  Disk space...");
         System.out.println("\tLuceneForwardIndex:\t" + diskSpace(baseIndexPath + "/lucene/forward") + "K");
@@ -140,7 +140,7 @@ public class TestEngine {
         System.out.println("\tRAMIndex:\t" + diskSpace(baseIndexPath + "/ram") + "K");
         System.out.println("\tDiskIndex:\t" + diskSpace(baseIndexPath + "/disk") + "K");
     }
-    
+
     static void testSearchPerformance(String collName, String baseIndexPath, String query, int cutoff) throws IOException {
         System.out.println("-----------------------");
         System.out.println("Testing engine performance on " + collName + " document collection");
@@ -148,27 +148,31 @@ public class TestEngine {
         Index luceneIndex = new LuceneIndex(baseIndexPath + "/lucene");
         Index ramIndex = new SerializedRAMIndex(baseIndexPath + "/ram");
         Index diskIndex = new DiskIndex(baseIndexPath + "/disk");
-        
+
         Timer.reset();
         testSearch(new LuceneEngine(baseIndexPath + "/lucene"), query, cutoff);
         Timer.time("  --> ");
         testSearch(new SlowVSMEngine(luceneFwdIndex), query, cutoff);
         Timer.time("  --> ");
-        
+
         testSearch(new TermBasedVSMEngine(luceneIndex), query, cutoff);
         Timer.time("  --> ");
         testSearch(new TermBasedVSMEngine(ramIndex), query, cutoff);
         Timer.time("  --> ");
         testSearch(new TermBasedVSMEngine(diskIndex), query, cutoff);
         Timer.time("  --> ");
-        
+
+        testSearch(new DocBasedVSMEngine(luceneIndex), query, cutoff);
+        Timer.time("  --> ");
+        testSearch(new DocBasedVSMEngine(ramIndex), query, cutoff);
+        Timer.time("  --> ");
         testSearch(new DocBasedVSMEngine(diskIndex), query, cutoff);
         Timer.time("  --> ");
     }
 
     static void testSearch (SearchEngine engine, String query, int cutoff) throws IOException {
         SearchRanking ranking = engine.search(query, cutoff);
-        System.out.println("  " + engine.getClass().getSimpleName() 
+        System.out.println("  " + engine.getClass().getSimpleName()
                 + " + " + engine.getIndex().getClass().getSimpleName()
                 + ": top " + cutoff + " for query \"" + query + "\"");
         for (SearchRankingDoc result : ranking)

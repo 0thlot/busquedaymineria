@@ -8,8 +8,6 @@ import es.uam.eps.bmi.search.ranking.SearchRanking;
 import es.uam.eps.bmi.search.ranking.impl.RankingImpl;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.PriorityQueue;
 
 public class DocBasedVSMEngine extends AbstractVSMEngine {
@@ -22,52 +20,50 @@ public class DocBasedVSMEngine extends AbstractVSMEngine {
     public SearchRanking search(String query, int cutoff) throws IOException {
         String[] terms = parse(query);
         RankingImpl ranking = new RankingImpl(index, cutoff);
+        int numDocs = index.numDocs();
 
         PriorityQueue<ImplPosting> heapDocId = new PriorityQueue<>(terms.length);
-        Map<String,PostingsListIterator> listPosting = new HashMap<>();
-        Map<Integer,Double> mapDocScore = new HashMap<>();
+        PostingsListIterator[] listPosting = new PostingsListIterator[terms.length];
+        long[] docFreq = new long[terms.length];
 
+        int count = 0;
         for(String t: terms){
+            docFreq[count] = index.getDocFreq(t);
             PostingsListIterator pl = (PostingsListIterator) index.getPostings(t).iterator();
-            if(pl!=null && pl.hasNext()){
+            //si es 0 es que no existe en el index
+            if(docFreq[count]>0){
                 Posting p = pl.next();
-                heapDocId.add(new ImplPosting(p.getDocID(),p.getFreq(),t));
-                listPosting.put(t,pl);
+                heapDocId.add(new ImplPosting(p.getDocID(),p.getFreq(),count));
+                listPosting[count]=pl;
             }
+            count++;
         }
+
         int beforeDocId = heapDocId.peek().getDocID();
-        do{
-            if(heapDocId.isEmpty()){
-                if(!mapDocScore.isEmpty()){
-                    ranking.add(beforeDocId,mapDocScore.get(beforeDocId)/index.getDocNorm(beforeDocId));
-                    mapDocScore.remove(beforeDocId);
-                }
-                break;
-            }
-            ImplPosting head=heapDocId.poll();
+        ImplPosting head;
+        PostingsListIterator pl;
+        Posting p;
+        double puntuacion =0;
+        while(!heapDocId.isEmpty()){
 
+            head=heapDocId.poll();
             if(beforeDocId!=head.getDocID()){
-                ranking.add(beforeDocId,mapDocScore.get(beforeDocId)/index.getDocNorm(beforeDocId));
-                mapDocScore.remove(beforeDocId);
+                ranking.add(beforeDocId,puntuacion/index.getDocNorm(beforeDocId));
+                puntuacion=0;
+                beforeDocId = head.getDocID();
             }
 
-            beforeDocId = head.getDocID();
+            puntuacion+=tfidf(head.getFreq(),docFreq[head.getPos()],numDocs);
+            pl = listPosting[head.getPos()];
 
-            if(!mapDocScore.containsKey(head.getDocID())){
-                mapDocScore.put(head.getDocID(), (double) 0);
+            if(pl.hasNext()){
+                p = pl.next();
+                heapDocId.add(new ImplPosting(p.getDocID(),p.getFreq(),head.getPos()));
             }
 
-            mapDocScore.replace(head.getDocID(),mapDocScore.get(head.getDocID())+tfidf(head.getFreq(),index.getDocFreq(head.getTerm()),index.numDocs()));
-            PostingsListIterator pl = listPosting.get(head.getTerm());
+        }
 
-            if(pl!=null && pl.hasNext()){
-                Posting p = pl.next();
-                heapDocId.add(new ImplPosting(p.getDocID(),p.getFreq(),head.getTerm()));
-            }else{
-                listPosting.remove(head.getTerm());
-            }
-
-        }while(true);
+        ranking.add(beforeDocId,puntuacion/index.getDocNorm(beforeDocId));
 
         return ranking;
     }

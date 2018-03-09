@@ -3,7 +3,6 @@ package es.uam.eps.bmi.search.index.impl;
 
 import es.uam.eps.bmi.search.index.Config;
 import es.uam.eps.bmi.search.index.Index;
-import es.uam.eps.bmi.search.index.structure.impl.ImplPostingList;
 
 import java.io.File;
 import java.io.FileOutputStream;
