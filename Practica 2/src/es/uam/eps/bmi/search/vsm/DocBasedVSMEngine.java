@@ -41,7 +41,6 @@ public class DocBasedVSMEngine extends AbstractVSMEngine {
 
         int beforeDocId = heapDocId.peek().getDocID();
         ImplPosting head;
-        PostingsListIterator pl;
         Posting p;
         double puntuacion =0;
         while(!heapDocId.isEmpty()){
@@ -54,10 +53,9 @@ public class DocBasedVSMEngine extends AbstractVSMEngine {
             }
 
             puntuacion+=tfidf(head.getFreq(),docFreq[head.getPos()],numDocs);
-            pl = listPosting[head.getPos()];
 
-            if(pl.hasNext()){
-                p = pl.next();
+            if(listPosting[head.getPos()].hasNext()){
+                p = listPosting[head.getPos()].next();
                 heapDocId.add(new ImplPosting(p.getDocID(),p.getFreq(),head.getPos()));
             }
 

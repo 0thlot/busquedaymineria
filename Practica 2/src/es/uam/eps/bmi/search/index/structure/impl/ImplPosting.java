@@ -10,7 +10,7 @@ public class ImplPosting extends Posting implements Serializable {
 
     public ImplPosting(int id, long f, int pos) {
         super(id, f);
-        pos = pos;
+        this.pos = pos;
     }
 
     public int getPos() {
