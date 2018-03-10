@@ -2,7 +2,6 @@ package es.uam.eps.bmi.search.index.structure.impl;
 
 import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.index.structure.PostingsList;
-import es.uam.eps.bmi.search.index.structure.PostingsListIterator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,30 +10,37 @@ import java.util.List;
 
 public class ImplPostingList implements PostingsList, Serializable {
 
-    private List<Posting> postings;
-    private Iterator<Posting> iterator;
+    private List<Posting> pList;
 
     public ImplPostingList(){
-        postings = new ArrayList<>();
+        pList = new ArrayList<>();
     }
 
-    public int size(){ return postings.size(); }
+    public int size(){ return pList.size(); }
 
-    public void add(Posting posting){ postings.add(posting); }
+    public void add(Posting posting){ pList.add(posting); }
 
-    public boolean contains(Posting post){ return postings.contains(post); }
+    public void add(int docId){
+        if(!pList.isEmpty() && docId == pList.get(pList.size()-1).getDocID()){
+            pList.get(pList.size()-1).add1();
+        }else{
+            pList.add(new Posting(docId,1));
+        }
+    }
+
+    public boolean contains(Posting post){ return pList.contains(post); }
 
     @Override
     public Iterator<Posting> iterator() {
 
-        return new ImplPostingListIterator(postings);
+        return new ImplPostingListIterator(pList);
     }
 
     @Override
     public String toString() {
         StringBuilder aux = new StringBuilder();
 
-        for(Posting p:postings){
+        for(Posting p:pList){
             aux.append(p.getDocID()).append(" ").append(p.getFreq()).append(" ");
         }
         aux.deleteCharAt(aux.length()-1);

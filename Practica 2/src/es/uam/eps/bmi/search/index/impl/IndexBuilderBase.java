@@ -2,14 +2,14 @@ package es.uam.eps.bmi.search.index.impl;
 
 import es.uam.eps.bmi.search.index.AbstractIndexBuilder;
 import es.uam.eps.bmi.search.index.Config;
-import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.index.structure.impl.ImplPostingList;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
 
 public abstract class IndexBuilderBase extends AbstractIndexBuilder{
 
@@ -21,27 +21,19 @@ public abstract class IndexBuilderBase extends AbstractIndexBuilder{
     @Override
     protected void indexText(String text, String path) throws IOException {
 
-        List<String> terminos = Arrays.asList(text.toLowerCase().split("\\P{Alpha}+"));
-        Set<String> terminosSet = new HashSet<>(terminos);
-
-        for(String t: terminosSet){
+        for(String t: text.toLowerCase().split("\\P{Alpha}+")){
             if(!t.equals("") && !t.equals("-"))
-                addTermPosting(t,Collections.frequency(terminos,t));
+                addTermPosting(t);
         }
         outRutas.write((path+"\n").getBytes());
 
         docId++;
     }
 
-    private void addTermPosting(String t, int frequency) {
+    private void addTermPosting(String t) {
 
-        if(!postingMap.containsKey(t)){
-            postingMap.put(t,new ImplPostingList());
-        }
-
-        postingMap.get(t).add(new Posting(docId,frequency)) ;
-
-
+        postingMap.putIfAbsent(t,new ImplPostingList());
+        postingMap.get(t).add(docId) ;
     }
 
     @Override
