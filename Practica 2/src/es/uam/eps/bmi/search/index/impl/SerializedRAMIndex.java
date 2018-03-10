@@ -5,11 +5,11 @@ import es.uam.eps.bmi.search.index.NoIndexException;
 import es.uam.eps.bmi.search.index.structure.PostingsList;
 import es.uam.eps.bmi.search.index.structure.impl.ImplPostingList;
 
-
-import javax.swing.text.html.HTMLDocument;
-import java.io.*;
-import java.nio.file.Paths;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.Map;
 
 public class SerializedRAMIndex extends IndexBase<ImplPostingList> {
 
@@ -21,14 +21,13 @@ public class SerializedRAMIndex extends IndexBase<ImplPostingList> {
     }
 
     @Override
-    public PostingsList getPostings(String term) throws IOException {
+    public PostingsList getPostings(String term) {
         return listasPosting.get(term);
     }
 
     @Override
-    public void loadIndex(String ruta) throws IOException {
-        try(FileInputStream fileIn = new FileInputStream(ruta+File.separator+Config.INDEX_FILE);
-            ObjectInputStream in = new ObjectInputStream(fileIn)){
+    public void loadIndex(String ruta) {
+        try(ObjectInputStream in = new ObjectInputStream( new FileInputStream(ruta+File.separator+Config.INDEX_FILE))){
                 listasPosting = (Map<String,ImplPostingList>) in.readObject();
         } catch (IOException|ClassNotFoundException e) {
             e.printStackTrace();
