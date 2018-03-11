@@ -12,10 +12,22 @@ import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/** Clase encargada de la gestion del indice construido
+ * en el disco duro.
+ *
+ * @author oscar
+ * @author jorge
+ */
 public class DiskIndex extends IndexBase<Integer> {
 
     private RandomAccessFile postingFile;
 
+    /** Construye el diccionario, la lista de rutas de documentos
+     * y la lista de normas de documentos dado un directorio
+     *
+     * @param ruta directorio que contiene los documentos
+     * @throws IOException error en lectura
+     */
     public DiskIndex(String ruta) throws IOException {
         if(ruta==null || ruta.equals(""))
             throw new NoIndexException("Ruta esta vacia");

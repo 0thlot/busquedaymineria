@@ -3,12 +3,10 @@ import es.uam.eps.bmi.search.index.Index;
 import es.uam.eps.bmi.search.ranking.SearchRankingDoc;
 import java.io.IOException;
 
-/**
+/** Clase que mantiene un documento dentro de RankingImpl.
  *
  * @author jorge
  * @author oscar
- *
- * ES VALIDA NO BORRAR
  */
 public class RankingImplDoc extends SearchRankingDoc {
 
@@ -16,11 +14,12 @@ public class RankingImplDoc extends SearchRankingDoc {
     private String path;
     private double score;
 
-    RankingImplDoc(int docID, double score) {
-        this.docID = docID;
-        this.score = score;
-    }
-
+    /** Constructor por defecto de la clase
+     *
+     * @param docID ID del documento
+     * @param score Puntuacion
+     * @param path Directorio del documento
+     */
     RankingImplDoc(int docID, double score, String path) {
         this.docID = docID;
         this.score = score;

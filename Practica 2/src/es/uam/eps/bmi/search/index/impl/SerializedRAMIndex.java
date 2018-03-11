@@ -11,9 +11,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Map;
 
+/** Clase encargada de gestionar el indice generado en memoria RAM
+ *
+ * @author oscar
+ * @author jorge
+ */
 public class SerializedRAMIndex extends IndexBase<ImplPostingList> {
 
-
+    /** Constructor de la clase que carga el diccionario dado una ruta
+     *
+     * @param ruta directorio del indice
+     * @throws IOException error en lectura
+     */
     public SerializedRAMIndex(String ruta) throws IOException{
         super();
         if(ruta==null || ruta.equals(""))
@@ -21,6 +30,13 @@ public class SerializedRAMIndex extends IndexBase<ImplPostingList> {
         load(ruta);
     }
 
+    /** Constructor de la clase que carga el diccionario dado
+     * directamente por paramtero
+     *
+     * @param ruta directorio a los documentos
+     * @param dic diccionario
+     * @throws IOException error en lectura
+     */
     public SerializedRAMIndex(String ruta, Map<String,ImplPostingList> dic) throws IOException{
         super(ruta,dic);
     }

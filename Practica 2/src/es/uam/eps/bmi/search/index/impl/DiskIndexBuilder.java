@@ -11,9 +11,14 @@ import java.io.OutputStream;
 import java.util.Map;
 
 
+/** Clase encargada de generar un indice en el disco duro
+ *
+ * @author oscar
+ * @author jorge
+ */
 public class DiskIndexBuilder extends IndexBuilderBase {
 
-
+    /** Constructor base */
     public DiskIndexBuilder() {
         super();
     }

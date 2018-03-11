@@ -6,7 +6,8 @@ import es.uam.eps.bmi.search.ranking.SearchRankingDoc;
 import java.io.IOException;
 import java.util.*;
 
-/**
+/** Clase encargada de gestionar el ranking.
+ * No implementa funciones de lucene.
  *
  * @author jorge
  * @author oscar
@@ -17,6 +18,11 @@ public class RankingImpl implements SearchRanking {
     private PriorityQueue<SearchRankingDoc> ranking;
     private int cutoff;
 
+    /** Constructor de la clase por defecto.
+     *
+     * @param index indice sobre el que se construye el ranking
+     * @param cutoff tamaño del ranking
+     */
     public RankingImpl(Index index, int cutoff){
         this.index = index;
         this.cutoff = Math.min(cutoff, index.numDocs());
