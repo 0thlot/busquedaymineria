@@ -15,9 +15,14 @@ public class SerializedRAMIndex extends IndexBase<ImplPostingList> {
 
 
     public SerializedRAMIndex(String ruta) throws IOException{
+        super();
         if(ruta==null || ruta.equals(""))
             throw new NoIndexException("Ruta esta vacia");
         load(ruta);
+    }
+
+    public SerializedRAMIndex(String ruta, Map<String,ImplPostingList> dic) throws IOException{
+        super(ruta,dic);
     }
 
     @Override

@@ -3,7 +3,6 @@ package es.uam.eps.bmi.search.index.impl;
 import es.uam.eps.bmi.search.index.AbstractIndex;
 import es.uam.eps.bmi.search.index.Config;
 import es.uam.eps.bmi.search.index.structure.Posting;
-import es.uam.eps.bmi.search.index.structure.PostingsList;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,18 +19,26 @@ public abstract class IndexBase<V> extends AbstractIndex{
     protected String[] rutas;
     protected Map<String,V> listasPosting;
 
+    public IndexBase() {
+    }
+
+    public IndexBase(String ruta, Map<String, V> listasPosting) throws IOException {
+        this.listasPosting = listasPosting;
+        cargarRuta(ruta);
+    }
+
     @Override
     public int numDocs() {
         return rutas.length;
     }
 
     @Override
-    public String getDocPath(int docID) throws IOException{
+    public String getDocPath(int docID) {
         return rutas[docID];
     }
 
     @Override
-    public Collection<String> getAllTerms() throws IOException{
+    public Collection<String> getAllTerms() {
         return Collections.unmodifiableCollection(listasPosting.keySet());
     }
 
@@ -53,6 +60,15 @@ public abstract class IndexBase<V> extends AbstractIndex{
 
         this.listasPosting = new HashMap<>();
 
+        cargarRuta(ruta);
+
+        this.loadIndex(ruta);
+        this.loadNorms(ruta);
+
+    }
+
+    protected void cargarRuta(String ruta)  throws IOException{
+
         try (BufferedReader br = Files.newBufferedReader(Paths.get(ruta + File.separator + Config.PATHS_FILE))) {
             this.rutas = new String[(int)br.lines().parallel().count()];
         }
@@ -65,10 +81,6 @@ public abstract class IndexBase<V> extends AbstractIndex{
             }
 
         }
-
-        this.loadIndex(ruta);
-        this.loadNorms(ruta);
-
     }
 
     public abstract void loadIndex(String ruta) throws IOException;

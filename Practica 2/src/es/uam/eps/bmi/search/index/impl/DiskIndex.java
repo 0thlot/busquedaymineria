@@ -22,8 +22,6 @@ public class DiskIndex extends IndexBase<Integer> {
         load(ruta);
     }
 
-
-
     @Override
     public PostingsList getPostings(String term) throws IOException {
 

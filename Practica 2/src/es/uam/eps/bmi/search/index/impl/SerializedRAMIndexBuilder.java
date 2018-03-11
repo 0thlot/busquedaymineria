@@ -11,7 +11,7 @@ public class SerializedRAMIndexBuilder extends IndexBuilderBase implements Seria
 
     @Override
     protected Index getCoreIndex() throws IOException {
-        return new SerializedRAMIndex(indexRuta);
+        return new SerializedRAMIndex(indexRuta,postingMap);
     }
 
     @Override
@@ -19,7 +19,6 @@ public class SerializedRAMIndexBuilder extends IndexBuilderBase implements Seria
         try( ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(indexRuta+File.separator+Config.INDEX_FILE))
         ){
             out.writeObject(postingMap); //Guardamos las listas de postings
-            out.reset();
         }
     }
 }
