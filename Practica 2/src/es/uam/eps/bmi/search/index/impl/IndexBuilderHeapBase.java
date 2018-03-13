@@ -13,12 +13,15 @@ import java.util.Map;
 
 /** Clase abtracta base para SerializedRAMIndexBuilder y DiskIndexBuilder.
  * Concentra las funciones y variables comunes de las clases donde se implementan.
+ * Ademas permite contruir un fichero heap.data donde se guarda la ley Heap del indice
  *
  * Variables:
  *   -indexRuta: directorio del indice
  *   -docId: id del documento (sirve para la construccion del indice)
  *   -postingMap: diccionario de terminos y lista de postings
- *   -outRutas: estructura serializada para guardar el documento de rutas de documentos
+ *   -outRutas: Fichero donde guardar las rutas de documentos
+ *   -outHeap: Fichero donde guardar la ley de Heap
+ *   -tam: Suma de tamaños de los documentos
  *
  * Funciones:
  *  - indexText
@@ -31,21 +34,25 @@ import java.util.Map;
  * @author oscar
  * @author jorge
  */
-public abstract class IndexBuilderBase extends AbstractIndexBuilder{
+public abstract class IndexBuilderHeapBase extends AbstractIndexBuilder {
 
     protected String indexRuta;
     protected int docId=0;
     protected Map<String,ImplPostingList> postingMap = new HashMap<>();
     private OutputStream outRutas;
+    private OutputStream outHeap;
+    private long tam =0;
 
     @Override
     protected void indexText(String text, String path) throws IOException {
-
-        for(String t: text.toLowerCase().split("\\P{Alpha}+")){
+        String[] split=text.toLowerCase().split("\\P{Alpha}+");
+        for(String t: split){
             if(!t.equals("") && !t.equals("-"))
                 addTermPosting(t);
         }
         outRutas.write((path+"\n").getBytes());
+        tam+=split.length;
+        outHeap.write((tam+"\t"+postingMap.keySet().size()+"\n").getBytes());
 
         docId++;
     }
@@ -70,16 +77,18 @@ public abstract class IndexBuilderBase extends AbstractIndexBuilder{
             throw new IOException();
         }
         outRutas = new FileOutputStream(indexRuta+File.separator+ Config.PATHS_FILE);
+        outHeap = new FileOutputStream(indexRuta+File.separator+ "heap.dat");
         if (collectioFile.isDirectory()) {
-           this.indexFolder(collectioFile);
+            this.indexFolder(collectioFile);
         } else if (collectioFile.getName().endsWith(".zip")) {
-           this.indexZip(collectioFile);
+            this.indexZip(collectioFile);
         } else if (collectioFile.getName().endsWith(".txt")) {
-           this.indexURLs(collectioFile);
+            this.indexURLs(collectioFile);
         } else {
-           throw new IOException("Ruta de la coleccion no valida");
+            throw new IOException("Ruta de la coleccion no valida");
         }
         outRutas.close();
+        outHeap.close();
 
         this.saveIndex();
         this.saveDocNorms(indexPath);

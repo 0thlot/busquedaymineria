@@ -39,7 +39,6 @@ public class DiskIndex extends IndexBase<Integer> {
 
         postingFile.seek( this.listasPosting.get(term));
         return ImplPostingList.toList(postingFile.readLine());
-
     }
 
     @Override
@@ -57,4 +56,6 @@ public class DiskIndex extends IndexBase<Integer> {
         postingFile = new RandomAccessFile(ruta + File.separator + Config.POSTINGS_FILE,"r");
 
     }
+
+
 }
