@@ -43,7 +43,6 @@ public class PositionalPostingListImpl implements PostingsList, Serializable{
 
     @Override
     public Iterator<Posting> iterator() {
-        Posting[] aux = postings.toArray(new Posting[0]);
-        return Arrays.asList(aux).iterator();
+        return new PositionalPostingListIteratorImpl(postings.toArray(new PositionalPostingImpl[0]));
     }
 }
