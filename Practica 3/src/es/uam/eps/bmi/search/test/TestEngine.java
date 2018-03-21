@@ -1,11 +1,11 @@
 package es.uam.eps.bmi.search.test;
 
-import es.uam.eps.bmi.search.CombinedEngine;
+//import es.uam.eps.bmi.search.CombinedEngine;
 import es.uam.eps.bmi.search.SearchEngine;
-import es.uam.eps.bmi.search.graph.PageRank;
+//import es.uam.eps.bmi.search.graph.PageRank;
 import es.uam.eps.bmi.search.index.Index;
-import es.uam.eps.bmi.search.index.impl.PositionalIndex;
-import es.uam.eps.bmi.search.index.impl.PositionalIndexBuilder;
+//import es.uam.eps.bmi.search.index.impl.PositionalIndex;
+//import es.uam.eps.bmi.search.index.impl.PositionalIndexBuilder;
 import es.uam.eps.bmi.search.index.lucene.LuceneIndex;
 import es.uam.eps.bmi.search.index.lucene.LuceneBuilder;
 import es.uam.eps.bmi.search.index.lucene.LucenePositionalIndex;
@@ -34,22 +34,22 @@ public class TestEngine {
         System.out.println("Toy collection");
         new LuceneBuilder().build("collections/toy", "index/toy/lucene/regular");
         new LucenePositionalIndexBuilder().build("collections/toy", "index/toy/lucene/positional");
-        new PositionalIndexBuilder().build("collections/toy", "index/toy/positional");
+        //new PositionalIndexBuilder().build("collections/toy", "index/toy/positional");
 
-        System.out.println("-----------------------");
+      /*  System.out.println("-----------------------");
         System.out.println("URLs collection");
         new LuceneBuilder().build("collections/urls.txt", "index/urls/lucene/regular");
         new LucenePositionalIndexBuilder().build("collections/urls.txt", "index/urls/lucene/positional");
-        new PositionalIndexBuilder().build("collections/urls.txt", "index/urls/positional");
+        //new PositionalIndexBuilder().build("collections/urls.txt", "index/urls/positional");
 
         System.out.println("-----------------------");
         Timer.reset("1k collection");
         new LuceneBuilder().build("collections/docs1k.zip", "index/1k/lucene/regular");
         new LucenePositionalIndexBuilder().build("collections/docs1k.zip", "index/1k/lucene/positional");
-        new PositionalIndexBuilder().build("collections/docs1k.zip", "index/1k/positional");
+        //new PositionalIndexBuilder().build("collections/docs1k.zip", "index/1k/positional");
         Timer.time("--> ");
 
-        System.out.println("=======================");
+        /*System.out.println("=======================");
         System.out.println("Checking indices...");
         
         System.out.println("-----------------------");
@@ -76,10 +76,11 @@ public class TestEngine {
          
         System.out.println("=======================");
         System.out.println("Checking serch...");
+        */
         
         testSearch("toy", new LuceneEngine("index/toy/lucene/regular"), "and to sleep", 5);
         testSearch("toy", new ProximityEngine(new LucenePositionalIndex("index/toy/lucene/positional")), "and to sleep", 5);
-        testSearch("toy", new LuceneEngine("index/toy/lucene/regular"), "a b c", 5);
+      /*  testSearch("toy", new LuceneEngine("index/toy/lucene/regular"), "a b c", 5);
         testSearch("toy", new ProximityEngine(new LucenePositionalIndex("index/toy/lucene/positional")), "a b c", 5);
         testSearch("toy", new ProximityEngine(new LucenePositionalIndex("index/toy/lucene/positional")), "\"a b c\"", 5);
         testSearch("toy", new ProximityEngine(new LucenePositionalIndex("index/toy/lucene/positional")), "b c a", 5);
@@ -108,6 +109,7 @@ public class TestEngine {
                                             },
                                             new double[] {0.9,0.1,0.1}),
                 "\"obama family tree\"", 5);
+        */
     }
     
     static void testIndex(Index index, String word) throws IOException {
