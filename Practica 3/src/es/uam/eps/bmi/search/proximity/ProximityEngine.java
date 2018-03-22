@@ -91,29 +91,22 @@ public class ProximityEngine extends AbstractEngine{
             i++;
         }
 
-        int a=Integer.MIN_VALUE;
+        int a;
 
         while (b!=Integer.MAX_VALUE) {
             i = 0;
             for (int j = 0; j < iterators.length; j++) {
 
                 positions[j] = iterators[j].nextBefore(b);
-                if ( positions[j] == Integer.MAX_VALUE){
-                    b = Integer.MAX_VALUE;
-                    break;
-                }
+
                 if (positions[j] < positions[i]) i = j;
             }
-            if (b != Integer.MAX_VALUE) {
-                a = positions[i];
-                score += (literal && ((b - a + 1) != postingList.size())) ? 0 : ((double) 1 / (b - a - postingList.size() + 2));
-                if (iterators[i].hasNext()) {
-                    b = iterators[i].next();
-                    positions[i]=b;
-                } else {
-                    b = Integer.MAX_VALUE;
-                }
-            }
+
+            a = positions[i];
+            score += (literal && ((b - a + 1) != postingList.size())) ? 0 : ((double) 1 / (b - a - postingList.size() + 2));
+
+            b = iterators[i].nextAfter(a);
+            positions[i]=b;
         }
         return score;
     }
