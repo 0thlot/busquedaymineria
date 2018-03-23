@@ -76,7 +76,6 @@ public class TestEngine {
          
         System.out.println("=======================");
         System.out.println("Checking serch...");
-
         
         testSearch("toy", new LuceneEngine("index/toy/lucene/regular"), "and to sleep", 5);
         testSearch("toy", new ProximityEngine(new LucenePositionalIndex("index/toy/lucene/positional")), "and to sleep", 5);
@@ -94,8 +93,8 @@ public class TestEngine {
         testSearch("1k", new DocBasedVSMEngine(new LuceneIndex("index/1k/lucene/regular")), "obama family tree", 5);
         testSearch("1k", new ProximityEngine(new LucenePositionalIndex("index/1k/lucene/positional")), "obama family tree", 5);
         testSearch("1k", new ProximityEngine(new LucenePositionalIndex("index/1k/lucene/positional")), "\"obama family tree\"", 5);
-      /*
-        testSearch("toy 1", new PageRank("graph/toy-graph1.dat", 0.5, 50), "", 5);
+        
+       /* testSearch("toy 1", new PageRank("graph/toy-graph1.dat", 0.5, 50), "", 5);
         testSearch("toy 2", new PageRank("graph/toy-graph2.dat", 0.6, 50), "", 5);
         testSearch("1k simulated links", new PageRank("graph/1k-links.dat", 0.2, 50), "", 5);
         Timer.reset();
@@ -108,8 +107,7 @@ public class TestEngine {
                                                 new PageRank("graph/1k-links.dat", 0.2, 50)
                                             },
                                             new double[] {0.9,0.1,0.1}),
-                "\"obama family tree\"", 5);
-        */
+                "\"obama family tree\"", 5);*/
     }
     
     static void testIndex(Index index, String word) throws IOException {
