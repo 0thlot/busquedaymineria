@@ -33,7 +33,9 @@ public class PositionalDictionary implements EditableDictionary {
         if (termPostings.containsKey(term)){
             termPostings.get(term).add(docID, pos);
         }
-        else termPostings.put(term, new PositionalPostingListImpl (docID, pos));
+        else{
+            termPostings.put(term, new PositionalPostingListImpl (docID, pos));
+        }
     }
 
     public void add(String term, PostingsList postings) {

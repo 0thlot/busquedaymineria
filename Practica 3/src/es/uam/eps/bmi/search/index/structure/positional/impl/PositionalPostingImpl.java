@@ -35,6 +35,7 @@ public class PositionalPostingImpl extends PositionalPosting{
         return new PositionsIterator(positions);
     }
 
+
     public void add(int pos){
         add1();
         positions.add(pos);

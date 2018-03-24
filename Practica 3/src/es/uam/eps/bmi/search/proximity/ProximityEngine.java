@@ -84,6 +84,7 @@ public class ProximityEngine extends AbstractEngine{
         int b=Integer.MIN_VALUE;
         int i = 0;
         for(PositionalPostingImpl aux:postingList){
+            i=aux.getIndexPos();
             iterators[i]=aux.iterator();
             if(iterators[i].hasNext()){
                 positions[i]=iterators[i].next();
@@ -91,7 +92,6 @@ public class ProximityEngine extends AbstractEngine{
             }else{
                 return 0;
             }
-            i++;
         }
 
         int a;
@@ -105,14 +105,7 @@ public class ProximityEngine extends AbstractEngine{
             }
 
             a = positions[i];
-            if(literal){
-                //Si todos las posiciones van en orden creciente y no tienen palabras entre medias
-                score += (IntStream.range(0, positions.length - 1).allMatch(k -> positions[k] < positions[k+1]) && b-a+1 == postingList.size())?((double) 1 / (b - a - postingList.size() + 2)):0;
-
-            }else{
-                score += ((double) 1 / (b - a - postingList.size() + 2));
-            }
-
+            score += (literal && (!IntStream.range(0, positions.length - 1).allMatch(k -> positions[k] < positions[k+1]) || b-a+1 != postingList.size()))?0:((double) 1 / (b - a - postingList.size() + 2));
 
             b = iterators[i].nextAfter(a);
             positions[i]=b;
