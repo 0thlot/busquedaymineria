@@ -1,4 +1,4 @@
-package es.uam.eps.bmi.search.index.structure.positional.impl;
+package es.uam.eps.bmi.search.index.structure.positional;
 
 import es.uam.eps.bmi.search.index.structure.positional.PositionalPosting;
 import es.uam.eps.bmi.search.index.structure.positional.PositionsIterator;
@@ -19,14 +19,8 @@ public class PositionalPostingImpl extends PositionalPosting{
         add(pos);
     }
 
-    public PositionalPostingImpl(int id, int pos, int indexPos) {
-        super(id,0, new ArrayList<>());
-        add(pos);
-        this.indexPos=indexPos;
-    }
     public PositionalPostingImpl(PositionalPosting posting,int indexPos) {
-        super(posting.getDocID(),posting.getFreq(), StreamSupport.stream(Spliterators.spliteratorUnknownSize(posting.iterator(),
-                Spliterator.ORDERED), false).collect(Collectors.toList()));
+        super(posting.getDocID(),posting.getFreq(), posting.positions);
         this.indexPos=indexPos;
     }
 

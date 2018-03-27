@@ -2,6 +2,7 @@ package es.uam.eps.bmi.search.index.structure.positional.impl;
 
 import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.index.structure.PostingsListIterator;
+import es.uam.eps.bmi.search.index.structure.positional.PositionalPostingImpl;
 
 public class PositionalPostingListIteratorImpl implements PostingsListIterator {
 

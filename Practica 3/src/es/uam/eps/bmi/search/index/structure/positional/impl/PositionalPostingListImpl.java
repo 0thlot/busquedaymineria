@@ -2,9 +2,10 @@ package es.uam.eps.bmi.search.index.structure.positional.impl;
 
 import es.uam.eps.bmi.search.index.structure.Posting;
 import es.uam.eps.bmi.search.index.structure.PostingsList;
+import es.uam.eps.bmi.search.index.structure.positional.PositionalPostingImpl;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 

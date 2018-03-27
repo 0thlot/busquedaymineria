@@ -5,13 +5,10 @@ import es.uam.eps.bmi.search.index.Index;
 import es.uam.eps.bmi.search.index.structure.PostingsListIterator;
 import es.uam.eps.bmi.search.index.structure.positional.PositionalPosting;
 import es.uam.eps.bmi.search.index.structure.positional.PositionsIterator;
-import es.uam.eps.bmi.search.index.structure.positional.impl.PositionalPostingImpl;
+import es.uam.eps.bmi.search.index.structure.positional.PositionalPostingImpl;
 import es.uam.eps.bmi.search.ranking.SearchRanking;
 import es.uam.eps.bmi.search.ranking.impl.RankingImpl;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.stream.IntStream;
 
