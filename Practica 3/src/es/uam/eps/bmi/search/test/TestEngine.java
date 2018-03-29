@@ -1,13 +1,14 @@
 package es.uam.eps.bmi.search.test;
 
 //import es.uam.eps.bmi.search.CombinedEngine;
+
 import es.uam.eps.bmi.search.SearchEngine;
-//import es.uam.eps.bmi.search.graph.PageRank;
+import es.uam.eps.bmi.search.graph.PageRank;
 import es.uam.eps.bmi.search.index.Index;
 import es.uam.eps.bmi.search.index.impl.PositionalIndex;
 import es.uam.eps.bmi.search.index.impl.PositionalIndexBuilder;
-import es.uam.eps.bmi.search.index.lucene.LuceneIndex;
 import es.uam.eps.bmi.search.index.lucene.LuceneBuilder;
+import es.uam.eps.bmi.search.index.lucene.LuceneIndex;
 import es.uam.eps.bmi.search.index.lucene.LucenePositionalIndex;
 import es.uam.eps.bmi.search.index.lucene.LucenePositionalIndexBuilder;
 import es.uam.eps.bmi.search.index.structure.Posting;
@@ -19,6 +20,7 @@ import es.uam.eps.bmi.search.ranking.SearchRankingDoc;
 import es.uam.eps.bmi.search.ui.TextResultDocRenderer;
 import es.uam.eps.bmi.search.util.Timer;
 import es.uam.eps.bmi.search.vsm.DocBasedVSMEngine;
+
 import java.io.IOException;
 
 /**
@@ -94,13 +96,13 @@ public class TestEngine {
         testSearch("1k", new ProximityEngine(new LucenePositionalIndex("index/1k/lucene/positional")), "obama family tree", 5);
         testSearch("1k", new ProximityEngine(new LucenePositionalIndex("index/1k/lucene/positional")), "\"obama family tree\"", 5);
         
-       /* testSearch("toy 1", new PageRank("graph/toy-graph1.dat", 0.5, 50), "", 5);
+        testSearch("toy 1", new PageRank("graph/toy-graph1.dat", 0.5, 50), "", 5);
         testSearch("toy 2", new PageRank("graph/toy-graph2.dat", 0.6, 50), "", 5);
         testSearch("1k simulated links", new PageRank("graph/1k-links.dat", 0.2, 50), "", 5);
         Timer.reset();
         testSearch("google", new PageRank("graph/web-Google.txt", 0.2, 50), "", 5);
         Timer.time("  --> ");
-        
+      /*
         testSearch("1k", new CombinedEngine(new SearchEngine[] {
                                                 new DocBasedVSMEngine(new LuceneIndex("index/1k/lucene/regular")),
                                                 new ProximityEngine(new LucenePositionalIndex("index/1k/lucene/positional")),

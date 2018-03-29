@@ -102,8 +102,4 @@ public class PageRank implements SearchEngine, DocumentMap{
         return (1-sink)/builder.getNumDocs();
     }
 
-
-
-
-
 }
