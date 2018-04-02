@@ -26,10 +26,13 @@ public class CombinedEngine implements SearchEngine {
 
     @Override
     public SearchRanking search(String query, int cutoff) throws IOException {
-        Map<Integer,Double> ranking = new HashMap<>();
-        int i=0;
+        Map<String,Double> ranking = new HashMap<>();
+        DocumentMapImpl index = new DocumentMapImpl();
+        Map<String,Integer> mapPath = new HashMap<>();
+
+        int i=0,j=0;
         for(SearchEngine se: searchArray){
-            SearchRanking aux = se.search(query, cutoff);
+            SearchRanking aux = se.search(query, Integer.MAX_VALUE);
             Iterator<SearchRankingDoc> sourceIteratorMax =aux.iterator();
 
             Iterable<SearchRankingDoc> iterableMax = () -> sourceIteratorMax;
@@ -41,12 +44,19 @@ public class CombinedEngine implements SearchEngine {
             Stream<SearchRankingDoc> targetStream = StreamSupport.stream(iterable.spliterator(), false);
             double min = targetStream.min(Comparator.reverseOrder()).orElseThrow(NoSuchElementException::new).getScore();
             for(SearchRankingDoc rank:aux){
-                ranking.merge(rank.getDocID(),normalizaMinMax(rank.getScore(),min,max)*ponderacion[i],Double::sum);
+                if(!ranking.containsKey(rank.getPath())){
+                    index.put(j,rank.getPath());
+                    mapPath.put(rank.getPath(),j);
+                    j++;
+                }
+                ranking.merge(rank.getPath(),normalizaMinMax(rank.getScore(),min,max)*ponderacion[i],Double::sum);
             }
             i++;
         }
-        RankingImpl aux = new RankingImpl(searchArray[0].getDocMap(),cutoff);
-        ranking.forEach(aux::add);
+        RankingImpl aux = new RankingImpl(index,cutoff);
+        ranking.forEach((k,v)->{
+            aux.add(mapPath.get(k),v);
+        });
 
         return aux;
     }
@@ -62,5 +72,26 @@ public class CombinedEngine implements SearchEngine {
 
     public String[] parse(String query) {
         return query.toLowerCase().split("\\P{Alpha}+");
+    }
+
+    private class DocumentMapImpl implements DocumentMap{
+
+        private Map<Integer,String> map;
+
+        public DocumentMapImpl() {
+            this.map = new HashMap<>();
+        }
+        public void put(Integer docId,String path){
+            map.put(docId,path);
+        }
+        @Override
+        public String getDocPath(int docID) throws IOException {
+            return map.get(docID);
+        }
+
+        @Override
+        public double getDocNorm(int docID) throws IOException {
+            return 0;
+        }
     }
 }
