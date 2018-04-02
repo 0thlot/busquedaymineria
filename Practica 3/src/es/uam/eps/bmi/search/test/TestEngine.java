@@ -2,6 +2,7 @@ package es.uam.eps.bmi.search.test;
 
 //import es.uam.eps.bmi.search.CombinedEngine;
 
+import es.uam.eps.bmi.search.CombinedEngine;
 import es.uam.eps.bmi.search.SearchEngine;
 import es.uam.eps.bmi.search.graph.PageRank;
 import es.uam.eps.bmi.search.index.Index;
@@ -102,14 +103,14 @@ public class TestEngine {
         Timer.reset();
         testSearch("google", new PageRank("graph/web-Google.txt", 0.2, 50), "", 5);
         Timer.time("  --> ");
-      /*
+
         testSearch("1k", new CombinedEngine(new SearchEngine[] {
                                                 new DocBasedVSMEngine(new LuceneIndex("index/1k/lucene/regular")),
                                                 new ProximityEngine(new LucenePositionalIndex("index/1k/lucene/positional")),
                                                 new PageRank("graph/1k-links.dat", 0.2, 50)
                                             },
                                             new double[] {0.9,0.1,0.1}),
-                "\"obama family tree\"", 5);*/
+                "\"obama family tree\"", 5);
     }
     
     static void testIndex(Index index, String word) throws IOException {
