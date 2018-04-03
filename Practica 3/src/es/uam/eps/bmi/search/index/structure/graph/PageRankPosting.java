@@ -3,8 +3,10 @@ package es.uam.eps.bmi.search.index.structure.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/** Clase PageRankPosting
  *
+ * @author oscar
+ * @author jorge
  */
 public class PageRankPosting {
 
@@ -13,6 +15,11 @@ public class PageRankPosting {
     private List<Integer> in;
     private List<Integer> out;
 
+    /** Constructor de la clase
+     *
+     * @param docID id del documento
+     * @param docName nombre del documento
+     */
     public PageRankPosting(int docID, String docName){
         this.docName = docName;
         this.docID = docID;
@@ -29,27 +36,23 @@ public class PageRankPosting {
 
     public boolean compare(PageRankPosting post){ return post.getDocName().equals(docName); }
 
-    /**
-     * TODO
-     * @param docID
+    /** Añade un documento a lista de entrantes
+     * @param docID ide del documento
      */
     public void addIn(int docID){ in.add(docID); }
 
-    /**
-     * TODO
-     * @param docID
+    /** Añade un documento a lista de salientes
+     * @param docID ide del documento
      */
     public void addOut(int docID){ out.add(docID); }
 
     /**
-     * TODO
-     * @return
+     * @return numero de documentos entrantes
      */
     public int numIn(){ return in.size(); }
 
     /**
-     * TODO
-     * @return
+     * @return numero de documentos salientes
      */
     public int numOut(){ return out.size(); }
 }

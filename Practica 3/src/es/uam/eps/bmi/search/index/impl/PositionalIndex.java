@@ -10,8 +10,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+/** Clase PositionalIndex
+ *
+ * @author oscar
+ * @author jorge
+ */
 public class PositionalIndex extends SerializedRAMIndex {
 
+    /** Constructor de la clase
+     * @param indexFolder directorio que contiene el indice
+     * @throws IOException
+     */
     public PositionalIndex(String indexFolder) throws IOException{
         super(null,0);
         loadPaths(indexFolder);
@@ -25,6 +34,10 @@ public class PositionalIndex extends SerializedRAMIndex {
         }
     }
 
+    /** Constructor de la clase
+     * @param dic diccionario que contien la informacion de los documentos
+     * @param nDocs numero de documentos
+     */
     public PositionalIndex(Dictionary dic, int nDocs) {
         super(dic, nDocs);
     }

@@ -13,6 +13,8 @@ import java.util.List;
 
 /**
  *
+ * @author oscar
+ * @author jorge
  */
 public class PageRank implements SearchEngine, DocumentMap{
 
@@ -23,7 +25,7 @@ public class PageRank implements SearchEngine, DocumentMap{
     private List<Double> scoresDocs;
     private List<PageRankPosting> docsInfo;
 
-    /**
+    /** Constructor de la clase
      *
      * @param graphPath
      * @param r
@@ -58,9 +60,9 @@ public class PageRank implements SearchEngine, DocumentMap{
     @Override
     public double getDocNorm(int docID) throws IOException { return 0; }
 
-    /**
-     * TODO
-     * @return
+    /** Genera una lista de puntuaciones, el orden corresponde a los IDs de los
+     * documentos
+     * @return lista de puntuaciones
      */
     private List<Double> makeScores(){
         scoresDocs = new ArrayList<>(Collections.nCopies(builder.getNumDocs(),r_value/builder.getNumDocs()));
@@ -77,11 +79,11 @@ public class PageRank implements SearchEngine, DocumentMap{
         return scoresDocs;
     }
 
-    /**
+    /** Puntua un documento
      *
-     * @param doc
-     * @param sink
-     * @param scores
+     * @param doc posting con la informacion del documento
+     * @param sink valor del sumidero
+     * @param scores lista de puntuaciones
      * @return
      */
     private double docScore(PageRankPosting doc, double sink, List<Double> scores){
@@ -91,10 +93,10 @@ public class PageRank implements SearchEngine, DocumentMap{
         return scores.get(doc.getDocID()) + ir_value*neighborFrom_value + sink;
     }
 
-    /**
-     * TODO
-     * @param scores
-     * @return
+    /** Genera el valor del sumidero
+     *
+     * @param scores lista de puntuaciones
+     * @return valor double para los sumideros
      */
     private double sink(List<Double> scores){
         double sink = 0;
