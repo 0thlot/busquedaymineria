@@ -1,16 +1,16 @@
 package es.uam.eps.bmi.search.index.impl;
 
-import es.uam.eps.bmi.search.index.Config;
 import es.uam.eps.bmi.search.index.Index;
-import es.uam.eps.bmi.search.index.structure.EditableDictionary;
-import es.uam.eps.bmi.search.index.structure.impl.HashDictionary;
 import es.uam.eps.bmi.search.index.structure.impl.PositionalDictionary;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+/** Clase PositionalIndexBuilder
+ *
+ * @author oscar
+ * @author jorge
+ */
 public class PositionalIndexBuilder extends SerializedRAMIndexBuilder {
 
      /** Nuevo tipo de diccionario*/

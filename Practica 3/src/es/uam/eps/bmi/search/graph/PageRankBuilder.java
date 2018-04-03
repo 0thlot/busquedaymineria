@@ -10,8 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
+/** Clase de PageRankBuilder
  *
+ * @author oscar
+ * @author jorge
  */
 public class PageRankBuilder {
 
@@ -20,9 +22,9 @@ public class PageRankBuilder {
     private List<PageRankPosting> docsInfo;
     private Map<String,Integer> dic;
 
-    /**
+    /**Constructor de la clase
      *
-     * @param graphPath
+     * @param graphPath cadena que contiene la ubicacion del grafo
      */
     public PageRankBuilder(String graphPath){
         this.graphPath = graphPath;
@@ -32,9 +34,9 @@ public class PageRankBuilder {
 
     public int getNumDocs(){ return numDocs; }
 
-    /**
+    /** Constructor del indice
      *
-     * @return
+     * @return una lista de postings con la informacion de los documentos
      */
     public List<PageRankPosting> build(){
         try {
@@ -51,9 +53,8 @@ public class PageRankBuilder {
 
     public List<PageRankPosting> getDocsInfo() { return docsInfo; }
 
-    /**
-     *
-     * @param nodes
+    /** Procesa la informacion contenida en una linea del fichero
+     * @param nodes array de tamaño 2 con el nodo entrante y el nodo saliente
      */
     private void readLine(String[] nodes){
         if (nodes.length != 2) return;
@@ -63,10 +64,10 @@ public class PageRankBuilder {
         docsInfo.get(id_node2).addIn(id_node1);
     }
 
-    /**
+    /** Añade un nodo al diccionario y lo crea si no existe
      *
-     * @param name
-     * @return
+     * @param name nombre del nodo del documento
+     * @return id del documento
      */
     private int addNode(String name){
         try {
