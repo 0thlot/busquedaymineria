@@ -16,6 +16,11 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+/** Clase que genera un Crawler.
+ *
+ * @author oscar
+ * @author jorge
+ */
 public class WebCrawler {
 
     private final int numMaxDoc;
@@ -26,6 +31,13 @@ public class WebCrawler {
     private Set<String> urlsBase = new HashSet<>();
     private Set<String> urlsDisallow = new HashSet<>();
 
+    /**
+     *
+     * @param index Indice inicializado
+     * @param numMaxDoc Numero maximo de documentos
+     * @param rutaSemilla ruta del fichero donde estan las semillas
+     * @throws IOException
+     */
     public WebCrawler(IndexBuilder index, int numMaxDoc, String rutaSemilla) throws IOException {
         this.index = index;
         this.numMaxDoc = numMaxDoc;
@@ -52,14 +64,24 @@ public class WebCrawler {
         });
     }
 
+    /**
+     * Metodo que lanza el Crawler
+     * @throws IOException
+     */
     public void run() throws IOException{
 
         while(this.numDoc<this.numMaxDoc){
             colaURL.addAll(explorar(colaURL.poll()));
         }
 
+
     }
 
+    /**
+     * Explora la web sacada de la cola de prioridad
+     * @param doc DocCraler donde esta la ruta
+     * @return Lista con las webs nuevas a explorar
+     */
     private List<DocCrawler> explorar(DocCrawler doc){
         List<DocCrawler> encontrados = new ArrayList<>();
         int prioridad = ThreadLocalRandom.current().nextInt(1, 60 + 1);
@@ -70,7 +92,7 @@ public class WebCrawler {
         encontrados.add(doc);
 
         String url = doc.url.getProtocol() + "://" + doc.url.getHost();
-        System.out.println("[INFO] Procesando la url: "+doc.url);
+        //System.out.println("[INFO] Procesando la url: "+doc.url);
 
         if(!urlsBase.contains(url)) {
             //Si la url es nueva, procesamos su robots.txt
@@ -94,14 +116,14 @@ public class WebCrawler {
                     }
                 }
             } catch (IOException e) {
-                System.out.println("[ERROR] Al leer " + robotsUrl);
+                //System.out.println("[WARNING] Al leer " + robotsUrl);
             }
         }
            this.numDoc++;
 
             try {
                 d = Jsoup.connect(url).validateTLSCertificates(false).timeout(10000).get();
-                this.index.indexHTML(d.body().text(), url);
+                this.index.indexHTML(d.body().text(), doc.url.toString());
 
                 for (Element e : d.select("a[href]")) {
                     String enlace = e.attr("abs:href");
@@ -111,18 +133,26 @@ public class WebCrawler {
                     }
                 }
             } catch (Exception e) {
-                System.out.println("[ERROR] Al conectar con la url(" + url + ") o en el indice");
+               // System.out.println("[ERROR] Al conectar con la url(" + url + ") o en el indice");
             }
 
         return encontrados;
     }
 
-
+    /**
+     * Clase interna para dotar a un Path una prioridad
+     */
     private class DocCrawler implements Comparator<DocCrawler>,Comparable<DocCrawler>{
 
         private URL url;
         private int priority;
 
+        /**
+         *
+         * @param url Ruta de la web
+         * @param priority Su prioridad
+         * @throws MalformedURLException
+         */
         DocCrawler(String url, int priority) throws MalformedURLException {
             this.url = new URL(url);
             this.priority = priority;

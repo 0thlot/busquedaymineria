@@ -4,25 +4,19 @@ import es.uam.eps.bmi.search.SearchEngine;
 import es.uam.eps.bmi.search.index.Index;
 import es.uam.eps.bmi.search.index.IndexBuilder;
 import es.uam.eps.bmi.search.index.NoIndexException;
-import es.uam.eps.bmi.search.index.lucene.LuceneIndex;
-import es.uam.eps.bmi.search.index.lucene.LuceneBuilder;
+import es.uam.eps.bmi.search.index.impl.SerializedRAMIndex;
+import es.uam.eps.bmi.search.index.impl.SerializedRAMIndexBuilder;
 import es.uam.eps.bmi.search.vsm.DocBasedVSMEngine;
-import java.awt.Container;
-import java.awt.Desktop;
+
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import javax.swing.JButton;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 
 /**
  *
@@ -128,11 +122,11 @@ public class SearchWindow extends JFrame {
     }
 
     static Index createIndex(String folder) throws IOException {
-        return new LuceneIndex(folder);
+        return new SerializedRAMIndex(folder);
     }
 
     static IndexBuilder createIndexBuilder() {
-        return new LuceneBuilder();
+        return new SerializedRAMIndexBuilder();
     }
 
     public static void main (String a[]) throws IOException {
