@@ -7,8 +7,6 @@ import java.util.*;
 
 public class RatingsImpl implements Ratings {
 
-    private String dataPath;
-    private String separator;
     private int nRatings=0;
     private Map<Integer,Set<Integer>> users;
     private Map<Integer,Set<Integer>> items;
@@ -18,27 +16,22 @@ public class RatingsImpl implements Ratings {
         ratings = new ArrayList<>();
         users = new HashMap<>();
         items = new HashMap<>();
-
         //Leer fichero
         try {
-            for (String line: Files.readAllLines(Paths.get(dataPath))){
-                readLine(line.split("[ \t]"));
-            }
+            for (String line: Files.readAllLines(Paths.get(dataPath)))
+                readLine(line.split(separator));
         } catch(IOException e){
             System.out.print("Error al abrir el fichero de grafos");
             e.printStackTrace();
         }
-
-
-        //Iterar lineas
-        //En cada linea llamar a rate
     }
 
-    /**
+    /** Evalua una linea del fichero
      * @param info
      */
-    private void readLine(String[] info){
-       rate(Integer.getInteger(info[0]), Integer.getInteger(info[1]), Double.valueOf(info[2]));
+    private void readLine(String[] info) throws IOException {
+        if (info.length != 3) throw new IOException("Linea con formato incorrecto");
+        rate(Integer.getInteger(info[0]), Integer.getInteger(info[1]), Double.valueOf(info[2]));
     }
 
     @Override
