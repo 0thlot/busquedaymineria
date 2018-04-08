@@ -10,43 +10,33 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class AverageRecommender implements  Recommender {
+public class AverageRecommender extends   AbstractRecommender {
 
-    int cutoff;
-    Ratings ratings;
+    private Map<Integer,Double> ratingSum;
 
-    public AverageRecommender(Ratings ratings, int cutoff){
-        this.ratings=ratings;
-        this.cutoff=cutoff;
-    }
+    public AverageRecommender(Ratings ratings, int min){
+        super(ratings);
+        ratingSum = new HashMap<>();
+        for(int item : ratings.getItems()){
+            Set<Integer> users = ratings.getUsers(item);
+            if(users.size()>=min){
+                double score = users.stream().mapToDouble((u)->ratings.getRating(u,item)).sum();
+                ratingSum.put(item,score/users.size());
+            }
 
-    @Override
-    public Recommendation recommend(int cutoff) {
-
-        ARRecommendation recommendation = new ARRecommendation();
-
-        for (int user : ratings.getUsers()){
-            RankingImpl ranking = new RankingImpl(cutoff);
-            for(int item : ratings.getItems(user))
-                if (ratings.getRating(user, item)<=0.0)
-                    ranking.add(item, score(user, item));
-            recommendation.add(user,ranking);
         }
-        return recommendation;
     }
 
     @Override
     public double score(int user, int item) {
-        int num=0;
-        Double score=0.0;
+        Double score = ratingSum.get(item);
 
-        for(int userI : ratings.getUsers()){
-            Double scoreI = ratings.getRating(userI, item);
-            if (scoreI>0.0)
-                num++;
-            score += scoreI;
-        }
-        return score/num;
+        return (score==null)?0:score;
+    }
+
+    @Override
+    public String toString() {
+        return "average";
     }
 
     public class ARRecommendation implements Recommendation{
