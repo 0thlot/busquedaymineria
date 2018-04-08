@@ -4,10 +4,7 @@ import es.uam.eps.bmi.recsys.ranking.Ranking;
 import es.uam.eps.bmi.recsys.ranking.RankingElement;
 
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class RecommendationImpl implements Recommendation{
 
@@ -19,7 +16,7 @@ public class RecommendationImpl implements Recommendation{
 
     @Override
     public Set<Integer> getUsers() {
-        return userRanking.keySet();
+        return new HashSet<>(userRanking.keySet());
     }
 
     @Override

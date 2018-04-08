@@ -68,22 +68,22 @@ public class RatingsImpl implements Ratings {
 
     @Override
     public Set<Integer> getUsers(int item) {
-        return items.get(item);
+        return new HashSet<>(items.get(item));
     }
 
     @Override
     public Set<Integer> getItems(int user) {
-        return users.get(user);
+        return new HashSet<>(users.get(user));
     }
 
     @Override
     public Set<Integer> getUsers() {
-        return users.keySet();
+        return new HashSet<>(users.keySet());
     }
 
     @Override
     public Set<Integer> getItems() {
-        return items.keySet();
+        return new HashSet<>(items.keySet());
     }
 
     @Override
