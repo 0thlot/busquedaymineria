@@ -11,7 +11,7 @@ import java.util.Set;
 public abstract class AbstractRecommender implements Recommender {
 
 
-    private Ratings ratings;
+    protected Ratings ratings;
     public AbstractRecommender(Ratings ratings) {
         this.ratings = ratings;
     }
