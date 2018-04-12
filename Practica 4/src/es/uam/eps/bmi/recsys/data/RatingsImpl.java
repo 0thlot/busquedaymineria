@@ -12,6 +12,13 @@ public class RatingsImpl implements Ratings {
     private Map<Integer,Set<Integer>> items;
     private List<List<Double>> ratings;
 
+    public RatingsImpl(List<List<Double>> ratings, Map<Integer,Set<Integer>> u, Map<Integer,Set<Integer>> i, int nR){
+        this.ratings = ratings;
+        this.users = u;
+        this.items = i;
+        nRatings = nR;
+    }
+
     public RatingsImpl(String dataPath, String separator){
         ratings = new ArrayList<>();
         users = new HashMap<>();
@@ -93,6 +100,32 @@ public class RatingsImpl implements Ratings {
 
     @Override
     public Ratings[] randomSplit(double ratio) {
-        return new Ratings[0];
+        float maximo = 1.0f;
+        float minimo = 0.0f;
+        Random r = new Random();
+
+        List<List<Double>> train = new ArrayList<>();
+        List<List<Double>> test = new ArrayList<>();
+        final int[] nRTrain = {0};
+        final int[] nRTest = {0};
+
+        this.ratings.forEach((l)->{
+
+            if((r.nextFloat() * (maximo - minimo) + minimo)<=ratio){
+                train.add(l);
+                nRTrain[0] +=l.size();
+            }else{
+                test.add(l);
+                nRTest[0] +=l.size();
+            }
+
+        });
+
+        Ratings[] aux = new Ratings[2];
+        aux[0] = new RatingsImpl(train,users,items,nRTrain[0]);
+        aux[1] = new RatingsImpl(test,users,items,nRTest[0]);
+        return aux;
+
+
     }
 }
