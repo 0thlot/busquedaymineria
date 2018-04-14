@@ -16,8 +16,11 @@ public class MajorityRecommender extends AbstractRecommender {
         ratingSum = new HashMap<Integer,Double>();
         for (int item : ratings.getItems()) {
             double sum = 0;
-            for (int u : ratings.getUsers(item))
-                sum += ratings.getRating(u, item);
+            for (int u : ratings.getUsers(item)){
+                Double s=ratings.getRating(u, item);
+                sum +=(s!=null)?s:0 ;
+            }
+
             ratingSum.put(item, sum);
         }
     }

@@ -5,6 +5,7 @@ import es.uam.eps.bmi.recsys.ranking.RankingElement;
 import es.uam.eps.bmi.recsys.ranking.RankingImpl;
 import es.uam.eps.bmi.recsys.recommender.similarity.Similarity;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ItemNNRecommender extends AbstractRecommender {
@@ -15,7 +16,9 @@ public class ItemNNRecommender extends AbstractRecommender {
 
     public ItemNNRecommender(Ratings ratings, Similarity sim) {
         super(ratings);
-        this.ratings.getItems().stream().forEach((i)->{
+        this.sim = sim;
+        this.itemVecinos = new HashMap<>();
+        this.ratings.getItems().forEach((i)->{
             RankingImpl r = new RankingImpl(Integer.MAX_VALUE);
             this.ratings.getItems().stream().filter((j)->!j.equals(i)).forEach((j)->{
                 double s = this.sim.sim(i,j);

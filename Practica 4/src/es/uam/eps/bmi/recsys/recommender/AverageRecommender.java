@@ -20,7 +20,10 @@ public class AverageRecommender extends   AbstractRecommender {
         for(int item : ratings.getItems()){
             Set<Integer> users = ratings.getUsers(item);
             if(users.size()>=min){
-                double score = users.stream().mapToDouble((u)->ratings.getRating(u,item)).sum();
+                double score = users.stream().mapToDouble((u)->{
+                   Double s = ratings.getRating(u,item);
+                   return (s!=null)?s:0;
+                }).sum();
                 ratingSum.put(item,score/users.size());
             }
 
