@@ -20,7 +20,7 @@ public class FeaturesImpl<F> implements Features<F>{
         this.parser = parser;
         try {
             for (String line: Files.readAllLines(Paths.get(dataPath))){
-                readLine(line.split(separator));
+                    readLine(line.split(separator));
             }
         } catch(IOException e){
             System.out.print("Error al abrir el fichero de grafos");

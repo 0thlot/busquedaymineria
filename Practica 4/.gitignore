@@ -1,3 +1,11 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea/workspace.xml
-data/
+
+/data/movie_tags.dat
+/data/ratings.csv
+/data/tags.csv
+/data/toy-item-features.dat
+/data/toy-ratings.dat
+/data/toy-test.dat
+/data/toy-train.dat
+/data/user_ratedmovies.dat

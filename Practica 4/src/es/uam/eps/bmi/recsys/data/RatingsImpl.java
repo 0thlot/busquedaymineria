@@ -114,7 +114,6 @@ public class RatingsImpl implements Ratings {
         final int[] nRTest = {0};
 
         this.ratings.forEach((k,v)->{
-
             if((r.nextFloat() * (maximo - minimo) + minimo)<=ratio){
                 train.put(k,v);
                 nRTrain[0] +=v.size();
