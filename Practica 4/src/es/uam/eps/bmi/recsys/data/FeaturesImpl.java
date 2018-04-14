@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class FeaturesImpl<F extends Parser> implements Features<F>{
+public class FeaturesImpl<F> implements Features<F>{
 
     private Map<Integer,Map<F, Double>> features;  //Suponiendo que el id es la posicion en la lista
     private Parser<F> parser;
@@ -34,7 +34,7 @@ public class FeaturesImpl<F extends Parser> implements Features<F>{
     private void readLine(String[] info) throws IOException {
         if (info.length != 3)
             throw new IOException("Linea con formato incorrecto");
-        setFeature(Integer.getInteger(info[0]), parser.parse(info[1]), Double.valueOf(info[2]));
+        setFeature(Integer.valueOf(info[0]), parser.parse(info[1]), Double.valueOf(info[2]));
     }
 
     @Override

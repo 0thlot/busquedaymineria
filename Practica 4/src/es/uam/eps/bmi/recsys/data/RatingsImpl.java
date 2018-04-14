@@ -10,9 +10,9 @@ public class RatingsImpl implements Ratings {
     private int nRatings=0;
     private Map<Integer,Set<Integer>> users;
     private Map<Integer,Set<Integer>> items;
-    private List<List<Double>> ratings;
+    private Map<Integer,Map<Integer,Double>> ratings;
 
-    public RatingsImpl(List<List<Double>> ratings, Map<Integer,Set<Integer>> u, Map<Integer,Set<Integer>> i, int nR){
+    public RatingsImpl(Map<Integer,Map<Integer,Double>> ratings, Map<Integer,Set<Integer>> u, Map<Integer,Set<Integer>> i, int nR){
         this.ratings = ratings;
         this.users = u;
         this.items = i;
@@ -20,7 +20,7 @@ public class RatingsImpl implements Ratings {
     }
 
     public RatingsImpl(String dataPath, String separator){
-        ratings = new ArrayList<>();
+        ratings = new HashMap<>();
         users = new HashMap<>();
         items = new HashMap<>();
         //Leer fichero
@@ -37,27 +37,30 @@ public class RatingsImpl implements Ratings {
      * @param info
      */
     private void readLine(String[] info) throws IOException {
-        if (info.length != 3) throw new IOException("Linea con formato incorrecto");
-        rate(Integer.getInteger(info[0]), Integer.getInteger(info[1]), Double.valueOf(info[2]));
+        if (info.length != 3) {
+            throw new IOException("Linea con formato incorrecto");
+        }
+        int user = Integer.valueOf(info[0]);
+        int item = Integer.valueOf(info[1]);
+        double rating = Double.valueOf(info[2]);
+        rate(user,item , rating);
     }
 
     @Override
     public void rate(int user, int item, Double rating) {
 
         //Añadimos al double array
-        if (!ratings.contains(user))
-            ratings.set(user, new ArrayList<>());
-        ratings.get(user).set(item, rating);
+        if (!ratings.containsKey(user))
+            ratings.put(user, new HashMap<>());
+        ratings.get(user).putIfAbsent(item, rating);
         //Añadimos al map de user
         if (!users.containsKey(user)){
-            Set<Integer> set = new HashSet<>();
-            users.put(user,set);
+            users.put(user,new HashSet<>());
         }
         users.get(user).add(item);
         //Añadimos al map de item
-        if (!items.containsKey(user)){
-            Set<Integer> seti = new HashSet<>();
-            items.put(user,seti);
+        if (!items.containsKey(item)){
+            items.put(item,new HashSet<>());
         }
         items.get(item).add(user);
 
@@ -66,21 +69,22 @@ public class RatingsImpl implements Ratings {
 
     @Override
     public Double getRating(int user, int item) {
-        try{
+
+        if(ratings.containsKey(user)){
             return ratings.get(user).get(item);
-        }catch (NullPointerException e){
-            return 0.0;
         }
+        return null;
     }
 
     @Override
     public Set<Integer> getUsers(int item) {
-        return new HashSet<>(items.get(item));
+        return (items.get(item)!=null)? new HashSet<>(items.get(item)):new HashSet<>();
     }
 
     @Override
     public Set<Integer> getItems(int user) {
-        return new HashSet<>(users.get(user));
+
+        return (users.get(user)!=null)?new HashSet<>(users.get(user)):new HashSet<>();
     }
 
     @Override
@@ -104,19 +108,19 @@ public class RatingsImpl implements Ratings {
         float minimo = 0.0f;
         Random r = new Random();
 
-        List<List<Double>> train = new ArrayList<>();
-        List<List<Double>> test = new ArrayList<>();
+        Map<Integer,Map<Integer,Double>> train = new HashMap<>();
+        Map<Integer,Map<Integer,Double>> test = new HashMap<>();
         final int[] nRTrain = {0};
         final int[] nRTest = {0};
 
-        this.ratings.forEach((l)->{
+        this.ratings.forEach((k,v)->{
 
             if((r.nextFloat() * (maximo - minimo) + minimo)<=ratio){
-                train.add(l);
-                nRTrain[0] +=l.size();
+                train.put(k,v);
+                nRTrain[0] +=v.size();
             }else{
-                test.add(l);
-                nRTest[0] +=l.size();
+                test.put(k,v);
+                nRTest[0] +=v.size();
             }
 
         });
