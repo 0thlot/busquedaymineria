@@ -27,6 +27,7 @@ public class Rmse implements Metric {
 
                 if(score!=null){
                     Double cuadrado=Math.pow(re.getScore()-score,2);
+
                     rmseU+=(!cuadrado.isNaN())?cuadrado:0.0;
                     nT++;
                 }
@@ -40,7 +41,7 @@ public class Rmse implements Metric {
 
         }
 
-        return (double)rmse/nUsers;
+        return rmse/nUsers;
     }
 
     @Override

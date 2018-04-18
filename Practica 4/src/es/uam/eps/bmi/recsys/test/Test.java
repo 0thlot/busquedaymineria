@@ -14,16 +14,16 @@ import es.uam.eps.bmi.recsys.metric.Precision;
 import es.uam.eps.bmi.recsys.metric.Recall;
 import es.uam.eps.bmi.recsys.metric.Rmse;
 import es.uam.eps.bmi.recsys.recommender.AverageRecommender;
-//import es.uam.eps.bmi.recsys.recommender.CentroidRecommender;
+import es.uam.eps.bmi.recsys.recommender.CentroidRecommender;
 import es.uam.eps.bmi.recsys.recommender.ItemNNRecommender;
 import es.uam.eps.bmi.recsys.recommender.MajorityRecommender;
 import es.uam.eps.bmi.recsys.recommender.NormUserKNNRecommender;
 import es.uam.eps.bmi.recsys.recommender.RandomRecommender;
 import es.uam.eps.bmi.recsys.recommender.UserKNNRecommender;
-//import es.uam.eps.bmi.recsys.recommender.similarity.CosineFeatureSimilarity;
+import es.uam.eps.bmi.recsys.recommender.similarity.CosineFeatureSimilarity;
 import es.uam.eps.bmi.recsys.recommender.similarity.CosineItemSimilarity;
 import es.uam.eps.bmi.recsys.recommender.similarity.CosineUserSimilarity;
-//import es.uam.eps.bmi.recsys.recommender.similarity.JaccardFeatureSimilarity;
+import es.uam.eps.bmi.recsys.recommender.similarity.JaccardFeatureSimilarity;
 import es.uam.eps.bmi.recsys.recommender.similarity.Similarity;
 import es.uam.eps.bmi.recsys.util.Timer;
 import java.io.File;
@@ -122,12 +122,12 @@ public class Test {
         sim = new CosineItemSimilarity(ratings);
         testRecommender(new ItemNNRecommender(ratings, sim), n, nUsers, nItems);
         
-      /*  Timer.reset();
+        Timer.reset();
         testRecommender(new CentroidRecommender<F>(ratings, new CosineFeatureSimilarity<F>(features)), n, nUsers, nItems);
         Timer.reset();
         sim = new JaccardFeatureSimilarity<F>(features);
         testRecommender(new ItemNNRecommender(ratings, sim), n, nUsers, nItems);
-        */
+
     }
 
     static <U extends Comparable<U>,I extends Comparable<I>,F> void evaluateRecommenders(Ratings ratings, Features<F> features, int k, int n, Metric metrics[]) {

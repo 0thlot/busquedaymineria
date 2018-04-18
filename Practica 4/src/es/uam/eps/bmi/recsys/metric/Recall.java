@@ -28,29 +28,36 @@ public class Recall implements Metric {
 
             if(items!=null && items.size()>0){
                 int k=0;
-                int tUmbral;
+                int tUmbral = 0;
+
+               /* for(Integer i:items){
+                    Double s=this.ratings.getRating(u, i);
+                    if(s!=null && !s.isNaN() && s>umbral){
+                        tUmbral++;
+                    }
+                }*/
 
                 tUmbral = (int) items.stream().filter((i)-> {
                     Double s=this.ratings.getRating(u, i);
-                    return s!=null && s>umbral;
+                    return s!=null && !s.isNaN() && s>umbral;
                 }).count();
 
-                for (RankingElement re : rec.getRecommendation(u)) {
-                    if(k==cutoff){
-                        break;
-                    }
-                    Double score = ratings.getRating(u,re.getID());
+                if(tUmbral>0){
+                    for (RankingElement re : rec.getRecommendation(u)) {
+                        if(k==cutoff){
+                            break;
+                        }
+                        Double score = ratings.getRating(u,re.getID());
 
-                    if(score!=null && score>umbral){
-                        nUmbral++;
+                        if(score!=null && score>umbral){
+                            nUmbral++;
+                        }
+                        k++;
                     }
-                    k++;
+                    recall+=(double)nUmbral/tUmbral;
                 }
-
-                recall+=(double)nUmbral/tUmbral;
-                nUsers++;
             }
-
+            nUsers++;
 
         }
 

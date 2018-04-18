@@ -7,10 +7,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class FeaturesImpl<F extends Parser> implements Features<F>{
+public class FeaturesImpl<F> implements Features<F>{
 
     protected Map<Integer,Map<F, Double>> features;  //Suponiendo que el id es la posicion en la lista
     private Parser<F> parser;
@@ -37,12 +38,12 @@ public class FeaturesImpl<F extends Parser> implements Features<F>{
     private void readLine(String[] info) throws IOException {
         if (info.length != 3)
             throw new IOException("Linea con formato incorrecto");
-        setFeature(Integer.getInteger(info[0]), parser.parse(info[1]), Double.valueOf(info[2]));
+        setFeature(Integer.valueOf(info[0]), parser.parse(info[1]), Double.valueOf(info[2]));
     }
 
     @Override
     public Set getFeatures(int id) {
-        return features.get(id).keySet();
+        return new HashSet<>(features.get(id).keySet());
     }
 
     @Override
@@ -66,6 +67,6 @@ public class FeaturesImpl<F extends Parser> implements Features<F>{
 
     @Override
     public Set<Integer> getIDs() {
-        return features.keySet();
+        return new HashSet<>(features.keySet());
     }
 }
