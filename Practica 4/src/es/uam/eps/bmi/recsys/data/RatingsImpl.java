@@ -128,7 +128,5 @@ public class RatingsImpl implements Ratings {
         aux[0] = new RatingsImpl(train,users,items,nRTrain[0]);
         aux[1] = new RatingsImpl(test,users,items,nRTest[0]);
         return aux;
-
-
     }
 }

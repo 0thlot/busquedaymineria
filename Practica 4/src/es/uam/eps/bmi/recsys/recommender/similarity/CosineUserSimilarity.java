@@ -9,9 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class CosineUserSimilarity extends CosineAbstractSimilarity {
-
-
-
     public CosineUserSimilarity(Ratings ratings) {
         super(ratings);
         this.ratings.getUsers().forEach((u)->{

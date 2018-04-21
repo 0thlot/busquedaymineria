@@ -23,4 +23,9 @@ public class CentroidRecommender<F> extends AbstractRecommender {
     public double score(int user, int item) {
         return features.sim(user, item);
     }
+
+    @Override
+    public String toString(){
+        return "CentroidRecommender";
+    }
 }

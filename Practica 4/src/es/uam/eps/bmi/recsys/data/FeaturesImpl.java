@@ -1,8 +1,5 @@
 package es.uam.eps.bmi.recsys.data;
 
-import es.uam.eps.bmi.recsys.data.Features;
-import es.uam.eps.bmi.recsys.data.Parser;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -43,12 +40,16 @@ public class FeaturesImpl<F> implements Features<F>{
 
     @Override
     public Set getFeatures(int id) {
-        return new HashSet<>(features.get(id).keySet());
+        if (features.containsKey(id))
+            return new HashSet<>(features.get(id).keySet());
+        return null;
     }
 
     @Override
     public Double getFeature(int id, F feature) {
-        return features.get(id).get(feature);
+        if (features.get(id).containsKey(feature))
+            return features.get(id).get(feature);
+        return null;
     }
 
     @Override

@@ -45,4 +45,10 @@ public class ItemNNRecommender extends AbstractRecommender {
 
         return (C==0)?0:score/C;
     }
+
+    @Override
+    public String toString() {
+        return "ItemNNRecommender";
+    }
+
 }
