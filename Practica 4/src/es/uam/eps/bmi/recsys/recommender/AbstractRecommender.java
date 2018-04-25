@@ -25,7 +25,9 @@ public abstract class AbstractRecommender implements Recommender {
             Set<Integer> itemsNew = ratings.getItems();
             itemsNew.removeAll(ratings.getItems(u));
             itemsNew.forEach((i)->{
-                ranking.add(i,score(u,i));
+                double s = score(u,i);
+                if(s!=0)
+                    ranking.add(i,s);
             });
             rec.add(u,ranking);
         });

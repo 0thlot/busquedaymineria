@@ -19,6 +19,6 @@ public class UserKNNRecommender extends AbstractUKNNRecommender {
 
     @Override
     public String toString() {
-        return "UserKNNRecommender";
+        return "UserKNNRecommender -" + sim;
     }
 }
