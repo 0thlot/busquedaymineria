@@ -44,18 +44,17 @@ public class RecommendationImpl implements Recommendation{
             if(i<userCutoff){
                 int j=0;
                 for (Iterator<RankingElement> it = getRecommendation(user).iterator(); it.hasNext() && j<itemCutoff;j++ ) {
+                    out.append(user.toString());
                     print(it.next(),out);
                 }
-
-            }else{
+                i += 1;
+            }else
                 break;
-            }
-
         }
     }
 
     public void print(RankingElement e, PrintStream out){
-        out.println("El item  con id: "+e.getID()+" tiene el score: "+e.getScore());
+        out.println("\t"+e.getID()+"\t"+e.getScore());
     }
 
 }
