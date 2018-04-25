@@ -147,11 +147,11 @@ public class Test {
         sim = new CosineItemSimilarity(ratings);
         evaluateRecommender(new ItemNNRecommender(ratings, sim), n, metrics);
         
-       /* Timer.reset();
+        Timer.reset();
         evaluateRecommender(new CentroidRecommender<F>(ratings, new CosineFeatureSimilarity<F>(features)), n, metrics);
         Timer.reset();
         sim = new JaccardFeatureSimilarity<F>(features);
-        evaluateRecommender(new ItemNNRecommender(ratings, sim), n, metrics);*/
+        evaluateRecommender(new ItemNNRecommender(ratings, sim), n, metrics);
     }
 
     static <U,I extends Comparable<I>> void testRecommender(Recommender recommender, int n, int nUsers, int nItems) throws FileNotFoundException {

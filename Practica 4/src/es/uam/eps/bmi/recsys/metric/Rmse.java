@@ -40,8 +40,8 @@ public class Rmse implements Metric {
             }
 
         }
-
-        return rmse/nUsers;
+        Double result = rmse/nUsers;
+        return (!result.isNaN())?result:0.0;
     }
 
     @Override

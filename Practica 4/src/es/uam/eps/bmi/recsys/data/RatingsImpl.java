@@ -37,9 +37,6 @@ public class RatingsImpl implements Ratings {
      * @param info
      */
     private void readLine(String[] info) throws IOException {
-        if (info.length != 3) {
-            throw new IOException("Linea con formato incorrecto");
-        }
         int user = Integer.valueOf(info[0]);
         int item = Integer.valueOf(info[1]);
         double rating = Double.valueOf(info[2]);
