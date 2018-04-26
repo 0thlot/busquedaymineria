@@ -42,12 +42,12 @@ public class Test {
         System.out.println("=========================");
         System.out.println("Testing toy dataset");
         testDataset("data/toy-ratings.dat", "data/toy-item-features.dat", "\t", new IntParser(), 1, 2);
-        System.out.println("=========================");
+        /*System.out.println("=========================");
         System.out.println("Testing MovieLens \"latest-small\" dataset");
         testDataset("data/ratings.csv", "data/tags.csv", ",", new StringParser(), 35, 1176);
         System.out.println("=========================");
         System.out.println("Testing MovieLens HetRec dataset");
-        testDataset("data/user_ratedmovies.dat", "data/movie_tags.dat", "\t", new IntParser(), 894, 993);
+        testDataset("data/user_ratedmovies.dat", "data/movie_tags.dat", "\t", new IntParser(), 894, 993);*/
     }
     
     static <F>void toyTest(String dataset, String separator, Parser<F> featureParser) throws FileNotFoundException {
