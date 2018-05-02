@@ -4,8 +4,6 @@ import es.uam.eps.bmi.recsys.data.Features;
 import es.uam.eps.bmi.recsys.data.FeaturesCentroid;
 import es.uam.eps.bmi.recsys.data.Ratings;
 
-import java.util.*;
-
 /**
   * @author oscar
   * @author jorge
