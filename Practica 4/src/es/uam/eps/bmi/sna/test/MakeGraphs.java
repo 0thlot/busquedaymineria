@@ -2,24 +2,19 @@ package es.uam.eps.bmi.sna.test;
 
 import agape.tutorials.UndirectedGraphFactoryForStringInteger;
 import agape.visu.Visualization;
-import edu.uci.ics.jung.algorithms.generators.random.ErdosRenyiGenerator;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
-import org.apache.commons.collections15.Factory;
 import agape.generators.RandGenerator;
 
 
 import java.io.*;
-import java.util.HashSet;
 import java.util.Iterator;
 
 public class MakeGraphs {
 
-    private static int nodes = 10;
-    private static int edges = 10;
-    private static int steps = 10;
-    private static double p = 0.5;
+    private static int nodes = 10; /** Numero de nodos del grafo*/
+    private static int edges = 10; /** Numero de enlaces minimos en Barabasi-Albert*/
+    private static int steps = 10; /** Numero de iteraciones en Barabasi-Albert*/
+    private static double p = 0.5; /** Factor de dispersion en Erdos Renyi*/
 
     public static void main(String[] args) throws Exception {
 
@@ -34,7 +29,7 @@ public class MakeGraphs {
                 factory,
                 factory.vertexFactory,
                 factory.edgeFactory,
-                nodes, edges, 7);
+                nodes, edges, steps);
 
         //Imprimir los grafos erdos
         printGraph("erdosrenyi", erdos);
