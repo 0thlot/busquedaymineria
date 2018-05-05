@@ -38,4 +38,8 @@ public class CosineUserSimilarity extends CosineAbstractSimilarity {
         });
     }
 
+    @Override
+    public String toString() {
+        return "CosineUserSimilarity";
+    }
 }

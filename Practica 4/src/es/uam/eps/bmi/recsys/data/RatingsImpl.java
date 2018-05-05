@@ -12,11 +12,10 @@ public class RatingsImpl implements Ratings {
     private Map<Integer,Set<Integer>> items;
     private Map<Integer,Map<Integer,Double>> ratings;
 
-    public RatingsImpl(Map<Integer,Map<Integer,Double>> ratings, Map<Integer,Set<Integer>> u, Map<Integer,Set<Integer>> i, int nR){
-        this.ratings = ratings;
-        this.users = u;
-        this.items = i;
-        nRatings = nR;
+    public RatingsImpl(){
+        ratings = new HashMap<>();
+        users = new HashMap<>();
+        items = new HashMap<>();
     }
 
     public RatingsImpl(String dataPath, String separator){
@@ -105,25 +104,22 @@ public class RatingsImpl implements Ratings {
         float minimo = 0.0f;
         Random r = new Random();
 
-        Map<Integer,Map<Integer,Double>> train = new HashMap<>();
-        Map<Integer,Map<Integer,Double>> test = new HashMap<>();
-        final int[] nRTrain = {0};
-        final int[] nRTest = {0};
+        Ratings[] aux = new Ratings[2];
+        aux[0] = new RatingsImpl();
+        aux[1] = new RatingsImpl();
 
-        this.ratings.forEach((k,v)->{
-            if((r.nextFloat() * (maximo - minimo) + minimo)<=ratio){
-                train.put(k,v);
-                nRTrain[0] +=v.size();
-            }else{
-                test.put(k,v);
-                nRTest[0] +=v.size();
-            }
+        this.ratings.forEach((u,v)->{
 
+            v.forEach((i,s)->{
+                if((r.nextFloat() * (maximo - minimo) + minimo)<=ratio){
+                    aux[0].rate(u,i,s);
+
+                }else{
+                    aux[1].rate(u,i,s);
+                }
+            });
         });
 
-        Ratings[] aux = new Ratings[2];
-        aux[0] = new RatingsImpl(train,users,items,nRTrain[0]);
-        aux[1] = new RatingsImpl(test,users,items,nRTest[0]);
         return aux;
     }
 }

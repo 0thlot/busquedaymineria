@@ -6,7 +6,7 @@ import es.uam.eps.bmi.sna.metric.GlobalMetric;
 //import es.uam.eps.bmi.sna.metric.network.Assortativity;
 //import es.uam.eps.bmi.sna.metric.network.AvgUserMetric;
 //import es.uam.eps.bmi.sna.metric.network.ClusteringCoefficient;
-//import es.uam.eps.bmi.sna.metric.user.UserClusteringCoefficient;
+import es.uam.eps.bmi.sna.metric.user.UserClusteringCoefficient;
 import es.uam.eps.bmi.sna.ranking.Ranking;
 import es.uam.eps.bmi.sna.ranking.RankingElement;
 import es.uam.eps.bmi.sna.structure.Edge;
@@ -43,9 +43,9 @@ public class Test {
         System.out.println("User " + u + " has " + network.getContacts(u).size() + " contacts");
 
         // Métricas de usuarios
-        /*System.out.println("-------------------------");
+        System.out.println("-------------------------");
         testMetric(new UserClusteringCoefficient<U>(topK), network, u);
-
+/*
         // Métricas de arcos
         System.out.println("-------------------------");
         testMetric(new Embeddedness<U>(topK), network, new Edge<U>(u, v));
