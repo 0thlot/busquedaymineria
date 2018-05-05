@@ -12,18 +12,19 @@ public class UserClusteringCoefficient<U extends Comparable<U>> implements Local
     private Ranking<U> ranking;
 
     public UserClusteringCoefficient(int topK) {
+            ranking = new RankingImpl<>(topK);
+    }
 
-         ranking = new RankingImpl<>(topK);
+    public UserClusteringCoefficient(){
+        ranking = new RankingImpl<>();
     }
 
     @Override
     public Ranking<U> compute(UndirectedSocialNetwork<U> network) {
-        Ranking<U> ranking = new RankingImpl<>();
 
         network.getUsers().forEach((u)->{
             ranking.add(u,compute(network,u));
         });
-
         return ranking;
     }
 

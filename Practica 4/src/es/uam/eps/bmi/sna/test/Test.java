@@ -1,11 +1,11 @@
 package es.uam.eps.bmi.sna.test;
 
-//import es.uam.eps.bmi.sna.metric.edge.Embeddedness;
+import es.uam.eps.bmi.sna.metric.edge.Embeddedness;
 import es.uam.eps.bmi.sna.metric.LocalMetric;
 import es.uam.eps.bmi.sna.metric.GlobalMetric;
 //import es.uam.eps.bmi.sna.metric.network.Assortativity;
 //import es.uam.eps.bmi.sna.metric.network.AvgUserMetric;
-//import es.uam.eps.bmi.sna.metric.network.ClusteringCoefficient;
+import es.uam.eps.bmi.sna.metric.network.AvgUserMetric;
 import es.uam.eps.bmi.sna.metric.user.UserClusteringCoefficient;
 import es.uam.eps.bmi.sna.ranking.Ranking;
 import es.uam.eps.bmi.sna.ranking.RankingElement;
@@ -29,10 +29,10 @@ public class Test {
         testNetwork("graph/small1.csv", ",", new IntParser(), 5, 6, 4);
         testNetwork("graph/small2.csv", ",", new IntParser(), 5, 3, 5);
         testNetwork("graph/small3.csv", ",", new StringParser(), 5, "a", "b");
-        testNetwork("graph/facebook_combined.txt", " ", new IntParser(), 5, 9, 3);
-        testNetwork("graph/twitter.csv", ",", new StringParser(), 5, "el_pais", "ElviraLindo");
-        testNetwork("graph/barabasi.csv", ",", new IntParser(), 5, 1, 2);
-        testNetwork("graph/erdos.csv", ",", new IntParser(), 5, 1, 2);
+        //testNetwork("graph/facebook_combined.txt", " ", new IntParser(), 5, 9, 3);
+        //testNetwork("graph/twitter.csv", ",", new StringParser(), 5, "el_pais", "ElviraLindo");
+        //testNetwork("graph/barabasi.csv", ",", new IntParser(), 5, 1, 2);
+        //testNetwork("graph/erdos.csv", ",", new IntParser(), 5, 1, 2);
     }
     
     static <U extends Comparable<U>>void testNetwork(String graphFile, String separator, Parser<U> parser, int topK, U u, U v) throws FileNotFoundException {
@@ -45,17 +45,17 @@ public class Test {
         // Métricas de usuarios
         System.out.println("-------------------------");
         testMetric(new UserClusteringCoefficient<U>(topK), network, u);
-/*
+
         // Métricas de arcos
         System.out.println("-------------------------");
         testMetric(new Embeddedness<U>(topK), network, new Edge<U>(u, v));
         
         // Métricas globales de red
         System.out.println("-------------------------");
-        testMetric(new ClusteringCoefficient<U>(), network);
+        //testMetric(new ClusteringCoefficient<U>(), network);
         testMetric(new AvgUserMetric<U>(new UserClusteringCoefficient<U>()), network);
-        testMetric(new Assortativity<U>(), network);
-        */
+        //testMetric(new Assortativity<U>(), network);
+
     }
     
     static <T extends Comparable<T>,U>void testMetric(LocalMetric<T,U> metric, UndirectedSocialNetwork<U> network, T example) {

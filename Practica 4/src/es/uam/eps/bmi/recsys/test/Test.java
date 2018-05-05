@@ -45,7 +45,7 @@ public class Test {
         System.out.println("=========================");
         System.out.println("Testing MovieLens \"latest-small\" dataset");
         testDataset("data/ratings.csv", "data/tags.csv", ",", new StringParser(), 35, 1176);
-        /*System.out.println("=========================");
+        System.out.println("=========================");
         System.out.println("Testing MovieLens HetRec dataset");
         testDataset("data/user_ratedmovies.dat", "data/movie_tags.dat", "\t", new IntParser(), 894, 993);
     }
