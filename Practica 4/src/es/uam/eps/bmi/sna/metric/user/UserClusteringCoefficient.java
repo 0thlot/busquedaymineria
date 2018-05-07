@@ -39,7 +39,7 @@ public class UserClusteringCoefficient<U extends Comparable<U>> implements Local
             conectados+=contactos.stream().filter((n2)->!n1.equals(n2) && network.connected(n1,n2)).count();
         }
 
-        return (double) (conectados/2)/(posible);//los posibles y eliminamos duplicados
+        return  (posible!=0)?(double)(conectados/2)/(posible):0;//los posibles y eliminamos duplicados
     }
 
     @Override

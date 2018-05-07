@@ -3,9 +3,9 @@ package es.uam.eps.bmi.sna.test;
 import es.uam.eps.bmi.sna.metric.edge.Embeddedness;
 import es.uam.eps.bmi.sna.metric.LocalMetric;
 import es.uam.eps.bmi.sna.metric.GlobalMetric;
-//import es.uam.eps.bmi.sna.metric.network.Assortativity;
-//import es.uam.eps.bmi.sna.metric.network.AvgUserMetric;
+import es.uam.eps.bmi.sna.metric.network.Assortativity;
 import es.uam.eps.bmi.sna.metric.network.AvgUserMetric;
+import es.uam.eps.bmi.sna.metric.network.ClusteringCoefficient;
 import es.uam.eps.bmi.sna.metric.user.UserClusteringCoefficient;
 import es.uam.eps.bmi.sna.ranking.Ranking;
 import es.uam.eps.bmi.sna.ranking.RankingElement;
@@ -52,9 +52,9 @@ public class Test {
         
         // Métricas globales de red
         System.out.println("-------------------------");
-        //testMetric(new ClusteringCoefficient<U>(), network);
+        testMetric(new ClusteringCoefficient<U>(), network);
         testMetric(new AvgUserMetric<U>(new UserClusteringCoefficient<U>()), network);
-        //testMetric(new Assortativity<U>(), network);
+        testMetric(new Assortativity<U>(), network);
 
     }
     
