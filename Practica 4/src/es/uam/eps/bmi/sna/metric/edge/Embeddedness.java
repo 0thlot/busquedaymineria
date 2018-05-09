@@ -4,6 +4,7 @@ import es.uam.eps.bmi.sna.metric.LocalMetric;
 import es.uam.eps.bmi.sna.ranking.Ranking;
 import es.uam.eps.bmi.sna.ranking.RankingImpl;
 import es.uam.eps.bmi.sna.structure.Edge;
+import es.uam.eps.bmi.sna.structure.EdgeImpl;
 import es.uam.eps.bmi.sna.structure.UndirectedSocialNetwork;
 
 import java.util.HashSet;
@@ -13,9 +14,6 @@ public class Embeddedness <U extends Comparable<U>> implements LocalMetric<Edge<
 
     private Ranking<Edge<U>> ranking;
     private int cont;
-    Edge<U> edge;
-    Edge<U> edge_mirror;
-    boolean flag;
 
     public Embeddedness(int topk){
         ranking = new RankingImpl<>(topk);
@@ -28,17 +26,15 @@ public class Embeddedness <U extends Comparable<U>> implements LocalMetric<Edge<
         network.getUsers().forEach((u)->{
             network.getUsers().forEach((v)-> {
                 if (!u.equals(v)){
-                    edge = new Edge<U>(u, v);
-                    edge_mirror = new Edge<U>(v, u);
-                    flag = true;
+                    Edge<U> edge = new EdgeImpl<U>(u, v);
+                    Edge<U> edge_mirror = new EdgeImpl<U>(v, u);
+                    boolean flag = false;
 
                     //Buscamos si la arista ya ha sido vista
-                    setNotRepeated.forEach((e) -> {
-                        if (e.compareTo(edge) == 0 || e.compareTo(edge_mirror) == 0)
-                            flag = false;
-                    });
+                   flag = setNotRepeated.contains(edge);
+                   flag |= setNotRepeated.contains(edge_mirror);
 
-                    if (flag) {
+                   if (!flag) {
                         ranking.add(edge, compute(network, edge));
                         setNotRepeated.add(edge);
                     }

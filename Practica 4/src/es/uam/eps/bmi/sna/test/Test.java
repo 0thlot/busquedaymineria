@@ -30,7 +30,7 @@ public class Test {
         testNetwork("graph/small2.csv", ",", new IntParser(), 5, 3, 5);
         testNetwork("graph/small3.csv", ",", new StringParser(), 5, "a", "b");
         //testNetwork("graph/facebook_combined.txt", " ", new IntParser(), 5, 9, 3);
-        //testNetwork("graph/twitter.csv", ",", new StringParser(), 5, "el_pais", "ElviraLindo");
+        testNetwork("graph/twitter.csv", ",", new StringParser(), 5, "el_pais", "ElviraLindo");
         //testNetwork("graph/barabasi.csv", ",", new IntParser(), 5, 1, 2);
         //testNetwork("graph/erdos.csv", ",", new IntParser(), 5, 1, 2);
     }
