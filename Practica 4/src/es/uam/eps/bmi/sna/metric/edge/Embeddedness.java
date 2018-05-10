@@ -13,7 +13,6 @@ import java.util.Set;
 public class Embeddedness <U extends Comparable<U>> implements LocalMetric<Edge<U>,U> {
 
     private Ranking<Edge<U>> ranking;
-    private int cont;
 
     public Embeddedness(int topk){
         ranking = new RankingImpl<>(topk);
@@ -27,14 +26,8 @@ public class Embeddedness <U extends Comparable<U>> implements LocalMetric<Edge<
             network.getUsers().forEach((v)-> {
                 if (!u.equals(v)){
                     Edge<U> edge = new EdgeImpl<U>(u, v);
-                    Edge<U> edge_mirror = new EdgeImpl<U>(v, u);
-                    boolean flag = false;
 
-                    //Buscamos si la arista ya ha sido vista
-                   flag = setNotRepeated.contains(edge);
-                   flag |= setNotRepeated.contains(edge_mirror);
-
-                   if (!flag) {
+                   if (!setNotRepeated.contains(new EdgeImpl<U>(v, u))) {
                         ranking.add(edge, compute(network, edge));
                         setNotRepeated.add(edge);
                     }
@@ -53,13 +46,8 @@ public class Embeddedness <U extends Comparable<U>> implements LocalMetric<Edge<
             u_size--;
             v_size--;
         }
-        cont = 0;
 
-        network.getContacts(element.getFirst()).forEach((n)->{
-            if (!n.equals(element.getSecond()))
-                if (network.connected(element.getSecond(),n))
-                    cont++;
-        });
+        long cont = network.getContacts(element.getFirst()).stream().filter((n)->!n.equals(element.getSecond())&&network.connected(element.getSecond(),n)).count();
 
         return (double) cont/(u_size+v_size-cont);
     }

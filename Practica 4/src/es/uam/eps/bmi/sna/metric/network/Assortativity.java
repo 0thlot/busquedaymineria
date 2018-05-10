@@ -19,7 +19,7 @@ public class Assortativity<U extends Comparable<U>> implements GlobalMetric<U> {
             Set<U> vecinos = network.getContacts(u);
             gradoAlCuadrado += Math.pow(vecinos.size(),2);
             gradoAlCubo += Math.pow(vecinos.size(),3);
-            gradosConectados += vecinos.parallelStream().mapToDouble((u2)->vecinos.size()*network.getContacts(u2).size()).sum();
+            gradosConectados += vecinos.stream().mapToDouble((u2)->vecinos.size()*network.getContacts(u2).size()).sum();
         }
 
         gradoAlCuadrado=Math.pow(gradoAlCuadrado,2);
