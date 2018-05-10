@@ -11,7 +11,10 @@ public class EdgeImpl<U extends Comparable<U>> extends Edge<U> {
 
     @Override
     public int hashCode() {
-        return first.hashCode() + second.hashCode();
+        int result = 1;
+        result = 31 * result + first.hashCode();
+        result = 17 * result  + second.hashCode();
+        return result;
     }
 
     @Override
