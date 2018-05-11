@@ -22,12 +22,17 @@ public class CosineFeatureSimilarity<F> extends FeatureSimilarity<F>{
         double modY = getMod(y, yFeatures);
         double numer = 0.0;
 
-        for (F f : xFeatures.getFeatures(x)) {
-            Double aux1 = xFeatures.getFeature(x, f);
-            Double aux2 = yFeatures.getFeature(y, f);
-            if (aux1!=null && aux2!=null)
-                numer += aux1 * aux2 ;
+        if(xFeatures.getFeatures(x)!=null){
+            for (F f : xFeatures.getFeatures(x)) {
+                Double aux1 = xFeatures.getFeature(x, f);
+                Double aux2 = yFeatures.getFeature(y, f);
+                if (aux1!=null && aux2!=null)
+                    numer += aux1 * aux2 ;
+            }
+        }else{
+            return 0;
         }
+
 
         return numer/(modX*modY);
     }
@@ -40,7 +45,7 @@ public class CosineFeatureSimilarity<F> extends FeatureSimilarity<F>{
     private double getMod(int ind, Features<F> features){
         double mod = 0.0;
 
-        if (features.getFeatures(ind).size()<=0)
+        if (features==null || features.getFeatures(ind) == null || features.getFeatures(ind).size()<=0)
             return 0.0;
 
         for (F f: features.getFeatures(ind)) {

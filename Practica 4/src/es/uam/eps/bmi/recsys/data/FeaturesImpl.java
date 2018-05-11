@@ -47,7 +47,7 @@ public class FeaturesImpl<F> implements Features<F>{
 
     @Override
     public Double getFeature(int id, F feature) {
-        if (features.get(id).containsKey(feature))
+        if (features.containsKey(id) && features.get(id).containsKey(feature))
             return features.get(id).get(feature);
         return null;
     }

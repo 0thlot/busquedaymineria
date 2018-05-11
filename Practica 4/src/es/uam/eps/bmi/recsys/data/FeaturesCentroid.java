@@ -27,14 +27,17 @@ public class FeaturesCentroid<F> extends FeaturesImpl<F>{
             for(int item: ratings.getItems(user)) {
                 mul = ratings.getRating(user, item);
                 //Recorremos cada F de cada item
-                for (F f : feature.getFeatures(item)) {
-                    score = 0.0;
-                    if (getFeatures(user)!=null)
-                        if (getFeature(user, f)!=null)
-                            score = getFeature(user, f);
-                    score += mul * feature.getFeature(item, f);
-                    setFeature(user, f, score);
+                if(feature.getFeatures(item)!=null){
+                    for (F f : feature.getFeatures(item)) {
+                        score = 0.0;
+                        if (getFeatures(user)!=null)
+                            if (getFeature(user, f)!=null)
+                                score = getFeature(user, f);
+                        score += mul * feature.getFeature(item, f);
+                        setFeature(user, f, score);
+                    }
                 }
+
             }
         }
     }

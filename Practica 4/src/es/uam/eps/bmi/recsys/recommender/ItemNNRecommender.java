@@ -10,45 +10,39 @@ import java.util.Map;
 
 public class ItemNNRecommender extends AbstractRecommender {
 
-    protected Map<Integer, RankingImpl> itemVecinos;
     protected Similarity sim;
-
 
     public ItemNNRecommender(Ratings ratings, Similarity sim) {
         super(ratings);
         this.sim = sim;
-        this.itemVecinos = new HashMap<>();
-        this.ratings.getItems().forEach((i)->{
-            RankingImpl r = new RankingImpl(Integer.MAX_VALUE);
-            this.ratings.getItems().stream().filter((j)->!j.equals(i)).forEach((j)->{
-                double s = this.sim.sim(i,j);
-                if(s>0)
-                    r.add(j,s);
-            });
-            this.itemVecinos.put(i,r);
 
-        });
     }
 
     @Override
     public double score(int user, int item) {
-        RankingImpl r = this.itemVecinos.get(user);
-        if(r==null) return 0;
-        double score = 0, C=0;
-        for(RankingElement vecino:r){
-            Double scoreI = this.ratings.getRating(user,vecino.getID());
-            if(scoreI!=null){
-                score+=vecino.getScore() * scoreI;
-                C+=vecino.getScore();
+
+        double score = 0;
+        Double s = this.ratings.getRating(user,item);
+
+        if(s!=null)
+            return s;
+
+        for(Integer j:ratings.getItems(user)){
+            if(!j.equals(item)){
+                Double scoreI = this.ratings.getRating(user,j);
+                if(scoreI!=null){
+                    score+=sim.sim(item,j) * scoreI;
+                }
             }
+
         }
 
-        return (C==0)?0:score/C;
+        return score;
     }
 
     @Override
     public String toString() {
-        return "ItemNNRecommender";
+        return "ItemNNRecommender - " +this.sim;
     }
 
 }

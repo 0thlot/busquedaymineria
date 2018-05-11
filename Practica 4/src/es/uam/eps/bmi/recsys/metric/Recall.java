@@ -30,13 +30,6 @@ public class Recall implements Metric {
                 int k=0;
                 int tUmbral = 0;
 
-               /* for(Integer i:items){
-                    Double s=this.ratings.getRating(u, i);
-                    if(s!=null && !s.isNaN() && s>umbral){
-                        tUmbral++;
-                    }
-                }*/
-
                 tUmbral = (int) items.stream().filter((i)-> {
                     Double s=this.ratings.getRating(u, i);
                     return s!=null && !s.isNaN() && s>umbral;
@@ -61,7 +54,7 @@ public class Recall implements Metric {
 
         }
 
-        return recall/nUsers;
+        return (double) recall/nUsers;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class Precision implements Metric{
                 }
                 Double score = ratings.getRating(u,re.getID());
 
-                if(score!=null && score>umbral){
+                if(score!=null && !score.isNaN() && score>umbral){
                     nUmbral++;
                 }
                 k++;
@@ -41,7 +41,7 @@ public class Precision implements Metric{
             nUsers++;
         }
 
-        return  precision/nUsers;
+        return (double) precision/nUsers;
 
     }
 

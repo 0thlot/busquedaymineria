@@ -12,12 +12,12 @@ public class NormUserKNNRecommender extends AbstractUKNNRecommender {
 
     @Override
     protected double scoreKNN(double score, double C, int numKwithRant) {
-        return (numKwithRant>=minRK)?score/C:0;
+        return (double) ((numKwithRant>=minRK)?score/C:0);
     }
 
 
     @Override
     public String toString() {
-        return "NormUserKNNRecommender";
+        return "NormUserKNNRecommender - " + sim;
     }
 }

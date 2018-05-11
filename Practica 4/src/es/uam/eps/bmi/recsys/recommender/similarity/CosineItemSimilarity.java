@@ -7,32 +7,96 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class CosineItemSimilarity extends CosineAbstractSimilarity {
+public class CosineItemSimilarity implements Similarity {
+
+    Map<Integer,Double>modItem=new HashMap<>();
+    protected Map<Integer,Map<Integer,Double>> vecinos;
+    protected Ratings ratings;
 
     public CosineItemSimilarity(Ratings r) {
-        super(r);
-        this.ratings.getItems().forEach((i)->{
-            Set<Integer> usersIaux = this.ratings.getUsers(i);
+        this.ratings = r;
+        this.vecinos = new HashMap<>();
+        Set<Integer> items = this.ratings.getItems();
+        for(Integer i:items){
 
-            if(usersIaux.size()>0){
-                Set<Integer> usersI=usersIaux.stream().filter((u)->this.ratings.getRating(u,i)!=null).collect(Collectors.toSet());
-                double modI = usersI.stream().mapToDouble((u)->Math.pow(this.ratings.getRating(u,i),2)).sum();
-                Map<Integer,Double> neigh = new HashMap<>();
+            Map<Integer,Double> neigh = new HashMap<>();
+            for(Integer j:items){
+                if(!i.equals(j)){
+                    if(vecinos.containsKey(j) && vecinos.get(j).containsKey(i)){
 
-                this.ratings.getItems().stream().filter((j)->!j.equals(i)).forEach((j)->{
-
-                    Set<Integer> usersJaux = this.ratings.getUsers(j);
-                    if(usersJaux.size()>0){
-                        Set<Integer>usersJ=usersJaux.stream().filter((v)->this.ratings.getRating(v,j)!=null).collect(Collectors.toSet());
-                        double modJ = usersJ.stream().mapToDouble((v)->Math.pow(this.ratings.getRating(v,j),2)).sum();
-                        usersJ.retainAll(usersI);
-                        double scoreComun =(usersJ.size()==0)?0:usersJ.stream().mapToDouble((u)->this.ratings.getRating(u,i)*this.ratings.getRating(u,j)).sum();
-                        neigh.putIfAbsent(j,scoreComun/Math.sqrt(modI*modJ));
+                    }else{
+                        neigh.put(j,scoreSim(i,j));
                     }
 
-                });
-                this.vecinos.putIfAbsent(i,neigh);
+                }
             }
-        });
+
+            this.vecinos.put(i,neigh);
+        }
+
+
+    }
+
+    @Override
+    public double sim(int x, int y) {
+
+        if(vecinos.containsKey(x) && vecinos.get(x).containsKey(y))
+            return vecinos.get(x).get(y);
+
+        if(vecinos.containsKey(y) && vecinos.get(y).containsKey(x))
+            return vecinos.get(y).get(x);
+
+
+        return 0;
+    }
+
+    private double scoreSim(Integer i, Integer j){
+        Set<Integer> usersIaux = this.ratings.getUsers(i);
+        Set<Integer> usersJaux = this.ratings.getUsers(j);
+
+        if(usersIaux.size()==0||usersJaux.size()==0){
+            return 0;
+        }
+
+        double modI =0, modJ=0;
+
+        if(modItem.containsKey(i)){
+            modI=modItem.get(i);
+        }else{
+            for(Integer u:usersIaux){
+                Double s=this.ratings.getRating(u,i);
+                if(s!=null){
+                    modI+=s*s;
+                }
+            }
+
+            modItem.put(i,modI);
+        }
+
+        if(modItem.containsKey(j)){
+            modJ=modItem.get(j);
+        }else{
+            for(Integer u:usersJaux){
+                Double s=this.ratings.getRating(u,j);
+                if(s!=null){
+                    modJ+=s*s;
+                }
+            }
+
+            modItem.put(j,modJ);
+        }
+
+        usersJaux.retainAll(usersIaux);
+        double scoreComun =0;
+        for(Integer u:usersJaux){
+            scoreComun+=this.ratings.getRating(u,i)*this.ratings.getRating(u,j);
+        }
+
+        return scoreComun/Math.sqrt(modI*modJ);
+    }
+
+    @Override
+    public String toString() {
+        return "CosineItemSimilarity";
     }
 }
