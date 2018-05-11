@@ -18,7 +18,7 @@ import java.util.Map;
 public class MakeGraphs {
 
     private static int nodes = 10; /** Numero de nodos del grafo*/
-    private static int edges = 5; /** Numero de enlaces minimos en Barabasi-Albert*/
+    private static int edges = 7; /** Numero de enlaces minimos en Barabasi-Albert*/
     private static int steps = 5; /** Numero de iteraciones en Barabasi-Albert*/
     private static double p = 0.5; /** Factor de dispersion en Erdos Renyi*/
 
@@ -39,12 +39,12 @@ public class MakeGraphs {
                 nodes, edges, steps);//nunca menos nodos que enlaces
 
         //Imprimir los grafos erdos
-        printGraph("erdosjeje", erdos);
-        printGraphOnScreen("erdosjeje", erdos);
-        printGraph("barbasijaja", barabasi);
-        printGraphOnScreen("barbasijaja", barabasi);
-        Visualization.showGraph(erdos);
-        Visualization.showGraph(barabasi);
+        printGraph("erdos", erdos);
+        printGraphOnScreen("erdos", erdos);
+        printGraph("barabasi", barabasi);
+        printGraphOnScreen("barabasi", barabasi);
+        //Visualization.showGraph(erdos); //Imprpesion por pantalla de los grafos.
+        //Visualization.showGraph(barabasi);
     }
 
 
