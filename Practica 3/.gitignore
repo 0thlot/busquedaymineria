@@ -80,3 +80,9 @@ hs_err_pid*
 !/lib/pdfbox-app-2.0.8.jar
 !/lib/queryparser/lucene-queryparser-7.2.1.jar
 !/lib/core/lucene-core-7.2.1.jar
+
+
+index/*
+index/*/*
+/graph/*
+!/bmi-p3-11.zip
